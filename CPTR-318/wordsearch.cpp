@@ -11,28 +11,25 @@ string yellow = "\u001b[33m";
 string blue = "\u001b[34m";
 string reset = "\u001b[0m";
 
-vector<vector<string>> puzzle;
+vector<vector<string>> puzzle(20, vector<string>(20));
 
-//Function definitions
+//Function definitions because I like keeping main on top
 void makePuzzle();
+void printPuzzle();
 
 int main() {
-
     makePuzzle();
-    cout << "ddf";
     return 0;
 }
 
 void makePuzzle() {
-
-    for(int i = 0; i < puzzle.size(); i++) {
-        for(int j = 0; i < puzzle[i].size(); i++) {
-
+    for (int i = 0; i < 20; i++) {
+        for (int j = 0; j < 20; j++) {
             puzzle[i][j] = ".";
-            cout << ".";
         }
-        cout << "\n";
     }
+}
 
-    return;
+void printPuzzle() {
+    
 }
