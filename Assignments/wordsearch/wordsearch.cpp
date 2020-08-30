@@ -1,6 +1,11 @@
 #include "uniformrandom.h"
 #include "wordsearch.h"
-#include <algorithm>
+#include <stdlib.h>
+#include <time.h>
+#include <vector>
+
+static LetterMatrix puzzle;
+static char filler = ' ';
 
 //-------------------------------------------------------
 //  You may add any helper functions you desire.
@@ -8,12 +13,64 @@
 //  "static" so they will be local to this source file.
 //-------------------------------------------------------
 
-static bool checkDirection(std::string dir, int x, int y, std::string word);
-static void choosePos(std::string word, int rows, int columns);
-static void fillVector(int rows, int columns);
+static void fillVector(int rows, int columns) {
+    for (int i = 0; i < rows; i++) {
+        puzzle.push_back(std::vector<char>{});
+        for (int j = 0; j < columns; j++) {
+            puzzle[i].push_back(filler);
+        }
+    }
+}
 
-static LetterMatrix puzzle;
-static char filler = '.';
+static bool checkDirection(int x, int y, int dx, int dy, std::string word) {
+    for (int i = 0; i < word.size(); i++) {
+        try {
+            char tempValue = puzzle.at(y + (i * dy)).at(i + (x * dx));
+            if(!tempValue && tempValue != filler || tempValue == (char) word[i]) {
+                return false;
+            }
+        } catch(const std::out_of_range& oor) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+static void placeWord(std::string word, int rows, int columns) {
+    //Choose initial x/y positions
+    int x = rand() % rows;
+    int y = rand() % columns;
+
+    //Choose a direction in a dx,dy format
+    std::vector<std::vector<int>> directions{{1, 0}, //Right
+                                             {0, 1}, //Down
+                                             {1, 1}, //Right-Down
+                                             {0, -1}, //Up
+                                             {-1, 0}, //Right
+                                             {-1, -1}}; //Up-Right
+
+    int dx, dy;
+    try{ 
+        std::vector<int> choice = directions[rand() % directions.size() - 1];
+        dx = choice.at(0); dy = choice.at(1);
+    //I couldn't figure out how to fix these but I think I "handled" it"
+    } catch(const std::out_of_range& e) {
+        //std::cout << "Error: " << e.what() << '\n';
+
+    } catch(const std::bad_alloc& e) {
+        //std::cout << "Error: " << e.what() << '\n';
+    }
+
+    if(checkDirection(x, y, dx, dy, word)) {
+        for (int i = 0; i < word.size(); i++) {
+            //If this ever causes a segmentation fault, the problem is in checkDirection()
+            puzzle[y + (i * dy)][i + (x * dx)] = word[i];
+        }
+    } else {
+        placeWord(word, rows, columns);
+    }
+}
 
 //  Constructs a puzzle key from a word list.
 //  word_list: the vector of words to put into the puzzle.
@@ -24,15 +81,13 @@ static char filler = '.';
 //  in its list cannot be placed.
 LetterMatrix make_key(const std::vector<std::string>& word_list, int rows, int columns) {
     fillVector(rows, columns);
+    srand(time(NULL));
 
     for (std::string word: word_list) {
-        choosePos(word, rows, columns);
+        placeWord(word, rows, columns);
     }
 
-    return {{'A', 'B', 'C', 'D'},
-            {'E', 'F', 'G', 'H'},
-            {'I', 'J', 'K', 'L'},
-            {'M', 'N', 'O', 'P'}};
+    return puzzle;
 }
 
 
@@ -40,91 +95,18 @@ LetterMatrix make_key(const std::vector<std::string>& word_list, int rows, int c
 //  key: the key from which the puzzle is to be created.
 //  Returns the newly created corresponding word search puzzle.
 LetterMatrix make_puzzle(const LetterMatrix& key) {
-    //  Replace this statement with your code
-    return key;
-}
+    auto r = UniformRandomGenerator(65, 90);
+    LetterMatrix finishedPuzzle(key.size(), std::vector<char>(key[0].size(), filler));
 
-static void choosePos(std::string word, int rows, int columns) {
-    int max = 0; 
-    if (rows > columns) { max = rows; } else { max = columns; }
-    auto r = UniformRandomGenerator(0, max);
-    int x = r();
-    int y = r();
-
-    /*
-        Checks in each of the four cardinal directions and pushes the direction to a vector if true...
-        Also adds the four in-between directions if the vector contains two adjacent pairs and adds those to the vector
-        This is an incredibly lazy solution I think and I"m kinda ashamed...
-    */
-    std::vector<std::string> directions;
-    int length = word.length();
-    if (length <= y)           { directions.push_back("u"); } //Up
-    if (length <= rows - y)    { directions.push_back("d"); } //Down
-    if (length <= x)           { directions.push_back("l"); } //Left
-    if (length <= columns - x) { directions.push_back("r"); } //Right
-
-    //Honestly... this part looks cancerous to me but I"m not sure how else to do it at the moment w/o a total rewrite...
-    if(std::any_of(directions.begin(), directions.end(), "u") &&
-       std::any_of(directions.begin(), directions.end(), "l")) { //Up-Left
-        directions.push_back("ul");
-    }
-    if(std::any_of(directions.begin(), directions.end(), "u") &&
-       std::any_of(directions.begin(), directions.end(), "r")) { //Up-Right
-        directions.push_back("ur");
-    }
-    if(std::any_of(directions.begin(), directions.end(), "d") &&
-       std::any_of(directions.begin(), directions.end(), "r")) { //Down-Right
-        directions.push_back("dr");
-    }
-    if(std::any_of(directions.begin(), directions.end(), "d") &&
-       std::any_of(directions.begin(), directions.end(), "l")) { //Down-Left
-        directions.push_back("dl");
-    }
-
-    //Randomly pick one of the available directions!
-    r = UniformRandomGenerator(0, directions.size() - 1);
-    std::string chosenDir = directions[r()];
-    if(checkDirection(chosenDir, x, y, word)) {
-
-    }
-}
-
-static bool checkDirection(std::string dir, int x, int y, std::string word) {
-    int dx = 0;
-    int dy = 0;
-
-    if (dir == "u") { 
-        dy = -1;
-    } else if (dir == "d") { 
-        dy = 1;
-    } else if (dir == "l") {
-        dx = -1;
-    } else if (dir == "r") {
-        dx = 1;
-    } else if (dir == "ul") { 
-        dx = -1; dy = -1;
-    } else if (dir == "ur") { 
-        dx = 1; dy = -1;
-    } else if (dir == "dr") { 
-        dx = 1; dy = 1;
-    } else if (dir == "dl") { 
-        dx = -1; dy = -1;
-    }
-
-    for (int i = y; i < word.length(); i += dy) {
-        for (int j = x; j < word.length(); i += dx) {
-            if(puzzle[i][j] != filler || puzzle[i][j] != (char) word[j]) {
-                return false;
+    for (int i = 0; i < key.size(); i++) {
+        for (int j = 0; j < key.size(); j++) {
+            if(key[i][j] == filler) {
+                finishedPuzzle[i][j] = r();
+            } else {
+                finishedPuzzle[i][j] = key[i][j];
             }
         }
     }
-    return true;
-}
 
-static void fillVector(int rows, int columns) {
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < columns; j++) {
-            puzzle[i][j] = filler;
-        }
-    }
+    return finishedPuzzle;
 }
