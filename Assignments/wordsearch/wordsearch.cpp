@@ -59,7 +59,7 @@ static void placeWord(std::string word, int rows, int columns, int iteration) {
 
     int dx, dy;
     try{ 
-        std::vector<int> choice = directions[rand() % directions.size() - 1];
+        std::vector<int> choice = directions[rand() % (directions.size() - 1)];
         dx = choice.at(0); dy = choice.at(1);
     //I couldn't figure out how to fix these but I think I "handled" it"
     } catch(const std::out_of_range& e) {
