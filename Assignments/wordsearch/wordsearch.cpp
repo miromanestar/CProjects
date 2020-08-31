@@ -1,3 +1,6 @@
+//Miro Manestar | CPTR-318 Wordserach Assignment Part 1
+//Sunday, August 30, 2020 
+
 #include "uniformrandom.h"
 #include "wordsearch.h"
 #include <stdlib.h>
@@ -25,19 +28,25 @@ static void fillVector(int rows, int columns) {
 static bool checkDirection(int x, int y, int dx, int dy, std::string word) {
     for (int i = 0; i < word.size(); i++) {
         try {
-            char tempValue = puzzle.at(y + (i * dy)).at(i + (x * dx));
-            if(!tempValue && tempValue != filler || tempValue == (char) word[i]) {
+            char tempValue = puzzle.at(y + (i * dy)).at(x + (i * dx));
+            if(tempValue != (char) word[i] && tempValue != filler) {
                 return false;
             }
         } catch(const std::out_of_range& oor) {
-            return false;
+            return false; //If word goes beyond wordsearch size, return false
         }
     }
 
     return true;
 }
 
-static void placeWord(std::string word, int rows, int columns) {
+static void placeWord(std::string word, int rows, int columns, int iteration) {
+    //Halts function if attempt to find a spot for a word has failed 30 times to stop infinite recursion
+    if(iteration > 30) {
+        return;
+    }
+    iteration += 1;
+
     //Choose initial x/y positions
     int x = rand() % rows;
     int y = rand() % columns;
@@ -64,11 +73,11 @@ static void placeWord(std::string word, int rows, int columns) {
 
     if(checkDirection(x, y, dx, dy, word)) {
         for (int i = 0; i < word.size(); i++) {
-            //If this ever causes a segmentation fault, the problem is in checkDirection()
-            puzzle[y + (i * dy)][i + (x * dx)] = word[i];
+            //If this ever causes a segmentation fault, the problem is in checkDirection() bc it didn't correctly detect out of bounds error
+            puzzle[y + (i * dy)][x + (i * dx)] = word[i];
         }
     } else {
-        placeWord(word, rows, columns);
+        placeWord(word, rows, columns, iteration);
     }
 }
 
@@ -84,7 +93,7 @@ LetterMatrix make_key(const std::vector<std::string>& word_list, int rows, int c
     srand(time(NULL));
 
     for (std::string word: word_list) {
-        placeWord(word, rows, columns);
+        placeWord(word, rows, columns, 0);
     }
 
     return puzzle;
