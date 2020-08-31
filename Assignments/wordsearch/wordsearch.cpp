@@ -3,9 +3,7 @@
 
 #include "uniformrandom.h"
 #include "wordsearch.h"
-#include <stdlib.h>
 #include <time.h>
-#include <vector>
 
 static LetterMatrix puzzle;
 static char filler = ' ';
