@@ -58,7 +58,7 @@ static void placeWord(std::string word, int rows, int columns, int iteration) {
                                              {-1, -1}}; //Up-Right
 
     int dx, dy;
-    std::vector<int> choice = directions[rand() % (directions.size() - 1)];
+    std::vector<int> choice = directions[rand() % directions.size()];
     dx = choice.at(0); dy = choice.at(1);
 
     if(checkDirection(x, y, dx, dy, word)) {
