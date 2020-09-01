@@ -50,12 +50,14 @@ static void placeWord(std::string word, int rows, int columns, int iteration) {
     int y = rand() % columns;
 
     //Choose a direction in a dx,dy format
-    std::vector<std::vector<int>> directions{{1, 0}, //Right
-                                             {0, 1}, //Down
-                                             {1, 1}, //Right-Down
-                                             {0, -1}, //Up
-                                             {-1, 0}, //Right
-                                             {-1, -1}}; //Up-Right
+    std::vector<std::vector<int>> directions{{0, -1},  //Up
+                                             {0, 1},   //Down
+                                             {-1, 0},  //Left
+                                             {0, -1},  //Right
+                                             {-1, -1}, //Up-Left
+                                             {1, 1},   //Down-Right
+                                             {-1, 1},  //Down-Left
+                                             {1, -1}}; //Up-Right
 
     int dx, dy;
     try{ 
