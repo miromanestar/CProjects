@@ -43,7 +43,6 @@ static void placeWord(std::string word, int rows, int columns, int iteration) {
     if(iteration > 30) {
         return;
     }
-    iteration += 1;
 
     //Choose initial x/y positions
     int x = rand() % rows;
@@ -69,7 +68,7 @@ static void placeWord(std::string word, int rows, int columns, int iteration) {
             puzzle[y + (i * dy)][x + (i * dx)] = word[i];
         }
     } else {
-        placeWord(word, rows, columns, iteration);
+        placeWord(word, rows, columns, iteration + 1);
     }
 }
 
