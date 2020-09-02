@@ -111,7 +111,7 @@ LetterMatrix make_puzzle(const LetterMatrix& key) {
     return finishedPuzzle;
 }
 
-bool findWord(const std::string& word, LetterMatrix puz) {
+static bool findWord(const std::string& word, LetterMatrix puz) {
 
 }
 
