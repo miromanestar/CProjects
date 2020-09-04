@@ -26,7 +26,7 @@ std::vector<std::string> get_words() {
 
 
 int main() {
-    std::vector<std::string> word_list = get_words();
+    std::vector<std::string> word_list{"COMPUTER", "PROGRAM", "TEST", "RECURSIVE"};//get_words();
     //  Build a 20 x 20 word search key
     LetterMatrix key = make_key(word_list, 20, 20);
     //  Build a corresponding puzzle from the key
