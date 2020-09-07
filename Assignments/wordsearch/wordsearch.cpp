@@ -1,4 +1,4 @@
-//Miro Manestar | CPTR-318 Wordserach Assignment Part 1
+//Miro Manestar | CPTR-318 Wordsearch Assignment Part 1
 //Sunday, August 30, 2020 
 
 #include "uniformrandom.h"
@@ -24,7 +24,7 @@ static void fillVector(int rows, int columns) {
 }
 
 static bool checkDirection(int x, int y, int dx, int dy, std::string word) {
-    for (int i = 0; i < word.size(); i++) {
+    for (int i = 0; i < (int) word.size(); i++) {
         try {
             char tempValue = puzzle.at(y + (i * dy)).at(x + (i * dx));
             if(tempValue != (char) word[i] && tempValue != filler) {
@@ -63,7 +63,7 @@ static void placeWord(std::string word, int rows, int columns, int iteration) {
     dx = choice.at(0); dy = choice.at(1);
 
     if(checkDirection(x, y, dx, dy, word)) {
-        for (int i = 0; i < word.size(); i++) {
+        for (int i = 0; i < (int) word.size(); i++) {
             //If this ever causes a segmentation fault, the problem is in checkDirection() bc it didn't correctly detect out of bounds error
             puzzle[y + (i * dy)][x + (i * dx)] = word[i];
         }
@@ -98,8 +98,8 @@ LetterMatrix make_puzzle(const LetterMatrix& key) {
     auto r = UniformRandomGenerator(65, 90);
     LetterMatrix finishedPuzzle(key.size(), std::vector<char>(key[0].size(), filler));
 
-    for (int i = 0; i < key.size(); i++) {
-        for (int j = 0; j < key.size(); j++) {
+    for (int i = 0; i < (int) key.size(); i++) {
+        for (int j = 0; j < (int) key.size(); j++) {
             if(key[i][j] == filler) {
                 finishedPuzzle[i][j] = r();
             } else {
