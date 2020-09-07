@@ -32,7 +32,7 @@ static void fillVector(int rows, int columns) {
 }
 
 static bool checkDirection(int x, int y, int dx, int dy, std::string word) {
-    for (int i = 0; i < word.size(); i++) {
+    for (int i = 0; i < (int) word.size(); i++) {
         try {
             char tempValue = puzzle.at(y + (i * dy)).at(x + (i * dx));
             if(tempValue != (char) word[i] && tempValue != filler) {
@@ -61,7 +61,7 @@ static void placeWord(std::string word, int rows, int columns, int iteration) {
     dx = choice.at(0); dy = choice.at(1);
 
     if(checkDirection(x, y, dx, dy, word)) {
-        for (int i = 0; i < word.size(); i++) {
+        for (int i = 0; i < (int) word.size(); i++) {
             //If this ever causes a segmentation fault, the problem is in checkDirection() bc it didn't correctly detect out of bounds error
             puzzle[y + (i * dy)][x + (i * dx)] = word[i];
         }
@@ -96,8 +96,8 @@ LetterMatrix make_puzzle(const LetterMatrix& key) {
     auto r = UniformRandomGenerator(65, 90);
     LetterMatrix finishedPuzzle(key.size(), std::vector<char>(key[0].size(), filler));
 
-    for (int i = 0; i < key.size(); i++) {
-        for (int j = 0; j < key.size(); j++) {
+    for (int i = 0; i < (int) key.size(); i++) {
+        for (int j = 0; j < (int) key.size(); j++) {
             if(key[i][j] == filler) {
                 finishedPuzzle[i][j] = r();
             } else {
@@ -110,27 +110,35 @@ LetterMatrix make_puzzle(const LetterMatrix& key) {
 }
 
 static std::vector<int> findWord(int x, int y, const std::string& word, LetterMatrix puz) {
+    if(puz[y][x] != word[0]) {
+        return {-1};
+    }
     int dx, dy;
-    for(int i = 0; i < directions.size(); i++) {
+    for(int i = 0; i < (int) directions.size(); i++) {
         dx = directions[i][0];
         dy = directions[i][1];
 
-        for(int i = 1; i < word.size(); i++) {
+        for(int i = 1; i < (int) word.size(); i++) {
             try {
                 char tempValue = puz.at(y + (i * dy)).at(x + (i * dx));
                 if(tempValue != word[i]) {
+                    continue;
+                }
+                if(i == (int) directions.size() - 1 && tempValue != word[i]) {
                     return {-1};
+                } else {
+                    return {x, y, dx, dy};
                 }
             } catch(const std::out_of_range& oor) {
-                return {-1};
+                continue;
             }
         }
     }
-    return {x, y, dx, dy};
+    return {-1}; //This should never happen
 }
 
 static LetterMatrix fillSol(int x, int y, int dx, int dy, std::string word, LetterMatrix sol) {
-    for(int i = 0; i < word.size(); i++) {
+    for(int i = 0; i < (int) word.size(); i++) {
             sol[y + (i * dy)][x + (i * dx)] = word[i];
     }
     return sol;
@@ -142,15 +150,13 @@ LetterMatrix solve(const LetterMatrix& puz, const std::vector<std::string>& word
     std::vector<int> pos;
 
     for(std::string word : wordlist) {
-        for(int i = 0; i < puz.size(); i++) {
-            for(int j = 0; j < puz[i].size(); j++) {
-                if(puz[i][j] == word[0]) {
-                    pos = findWord(j, i, word, puz);
-                    if(pos[0] == -1) { 
-                        continue; 
-                    } else {
-                        sol = fillSol(pos[0], pos[1], pos[2], pos[3], word, sol);
-                    }
+        for(int y = 0; y < (int) puz.size(); y++) {
+            for(int x = 0; x < (int) puz[y].size(); x++) {
+                pos = findWord(x, y, word, puz);
+                if (pos[0] != -1) {
+                    fillSol(pos[0], pos[1], pos[2], pos[3], word, sol);
+                } else {
+                    continue;
                 }
             }
         }
