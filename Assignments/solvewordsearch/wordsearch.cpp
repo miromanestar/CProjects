@@ -6,7 +6,7 @@
 #include <time.h>
 
 static LetterMatrix puzzle;
-static char filler = '.';
+static char filler = ' ';
 static std::vector<std::vector<int>> directions{{0, -1},  //Up
                                                 {0, 1},   //Down
                                                 {-1, 0},  //Left
@@ -110,31 +110,30 @@ LetterMatrix make_puzzle(const LetterMatrix& key) {
 }
 
 static std::vector<int> findWord(int x, int y, const std::string& word, LetterMatrix puz) {
+    //If first letter doesn't match, move on (Saves time)
     if(puz[y][x] != word[0]) {
         return {-1};
     }
+
     int dx, dy;
-    for(int i = 0; i < (int) directions.size(); i++) {
-        dx = directions[i][0];
-        dy = directions[i][1];
+    for(std::vector<int> direction : directions) {
+        dx = direction[0];
+        dy = direction[1];
 
         for(int i = 1; i < (int) word.size(); i++) {
             try {
-                char tempValue = puz.at(y + (i * dy)).at(x + (i * dx));
-                if(tempValue != word[i]) {
-                    continue;
-                }
-                if(i == (int) directions.size() - 1 && tempValue != word[i]) {
-                    return {-1};
-                } else {
+                char temp = puz.at(y + (i * dy)).at(x + (i * dx));
+                if(temp != word[i]) { 
+                    break;
+                } else if(i == (int) word.size() - 1) {
                     return {x, y, dx, dy};
                 }
             } catch(const std::out_of_range& oor) {
-                continue;
+                break;
             }
         }
     }
-    return {-1}; //This should never happen
+    return {-1};
 }
 
 static LetterMatrix fillSol(int x, int y, int dx, int dy, std::string word, LetterMatrix sol) {
@@ -154,9 +153,7 @@ LetterMatrix solve(const LetterMatrix& puz, const std::vector<std::string>& word
             for(int x = 0; x < (int) puz[y].size(); x++) {
                 pos = findWord(x, y, word, puz);
                 if (pos[0] != -1) {
-                    fillSol(pos[0], pos[1], pos[2], pos[3], word, sol);
-                } else {
-                    continue;
+                    sol = fillSol(pos[0], pos[1], pos[2], pos[3], word, sol);
                 }
             }
         }
