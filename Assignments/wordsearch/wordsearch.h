@@ -6,6 +6,8 @@
 
 #include "lettermatrix.h"
 
+//Solves the puzzle I guess...
+LetterMatrix solve(const LetterMatrix& puz, const std::vector<std::string>& wordlist);
 
 //  Constructs a puzzle key from a word list.
 //  word_list: the vector of words to put into the puzzle.

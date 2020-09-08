@@ -1,5 +1,5 @@
-//Miro Manestar | CPTR-318 Wordsearch Assignment Part 1
-//Sunday, August 30, 2020 
+//Miro Manestar | CPTR-318 Wordsearch Assignment Part 2
+//Monday, September 7, 2020 
 
 #include "uniformrandom.h"
 #include "wordsearch.h"
@@ -7,6 +7,14 @@
 
 static LetterMatrix puzzle;
 static char filler = ' ';
+static std::vector<std::vector<int>> directions{{0, -1},  //Up
+                                                {0, 1},   //Down
+                                                {-1, 0},  //Left
+                                                {0, -1},  //Right
+                                                {-1, -1}, //Up-Left
+                                                {1, 1},   //Down-Right
+                                                {-1, 1},  //Down-Left
+                                                {1, -1}}; //Up-Right
 
 //-------------------------------------------------------
 //  You may add any helper functions you desire.
@@ -47,16 +55,6 @@ static void placeWord(std::string word, int rows, int columns, int iteration) {
     //Choose initial x/y positions
     int x = rand() % rows;
     int y = rand() % columns;
-
-    //Choose a direction in a dx,dy format
-    std::vector<std::vector<int>> directions{{0, -1},  //Up
-                                             {0, 1},   //Down
-                                             {-1, 0},  //Left
-                                             {0, -1},  //Right
-                                             {-1, -1}, //Up-Left
-                                             {1, 1},   //Down-Right
-                                             {-1, 1},  //Down-Left
-                                             {1, -1}}; //Up-Right
 
     int dx, dy;
     std::vector<int> choice = directions[rand() % directions.size()];
@@ -109,4 +107,56 @@ LetterMatrix make_puzzle(const LetterMatrix& key) {
     }
 
     return finishedPuzzle;
+}
+
+static std::vector<int> findWord(int x, int y, const std::string& word, LetterMatrix puz) {
+    //If first letter doesn't match, move on (Saves time)
+    if(puz[y][x] != word[0]) {
+        return {-1};
+    }
+
+    int dx, dy;
+    for(std::vector<int> direction : directions) {
+        dx = direction[0];
+        dy = direction[1];
+
+        for(int i = 1; i < (int) word.size(); i++) {
+            try {
+                char temp = puz.at(y + (i * dy)).at(x + (i * dx));
+                if(temp != word[i]) { 
+                    break;
+                } else if(i == (int) word.size() - 1) {
+                    return {x, y, dx, dy};
+                }
+            } catch(const std::out_of_range& oor) {
+                break;
+            }
+        }
+    }
+    return {-1};
+}
+
+static LetterMatrix fillSol(int x, int y, int dx, int dy, std::string word, LetterMatrix sol) {
+    for(int i = 0; i < (int) word.size(); i++) {
+            sol[y + (i * dy)][x + (i * dx)] = word[i];
+    }
+    return sol;
+}
+
+//Searches for items from wordlist inside puzzle
+LetterMatrix solve(const LetterMatrix& puz, const std::vector<std::string>& wordlist) {
+    LetterMatrix sol(puz.size(), std::vector<char>(puz[0].size(), filler));
+    std::vector<int> pos;
+
+    for(std::string word : wordlist) {
+        for(int y = 0; y < (int) puz.size(); y++) {
+            for(int x = 0; x < (int) puz[y].size(); x++) {
+                pos = findWord(x, y, word, puz);
+                if (pos[0] != -1) {
+                    sol = fillSol(pos[0], pos[1], pos[2], pos[3], word, sol);
+                }
+            }
+        }
+    }
+    return sol;
 }

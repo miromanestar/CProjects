@@ -31,6 +31,8 @@ int main() {
     LetterMatrix key = make_key(word_list, 20, 20);
     //  Build a corresponding puzzle from the key
     LetterMatrix puz = make_puzzle(key);
+    //Solve the puzzle
+    LetterMatrix sol = solve(puz, word_list);
     //  Print the list of words
     for (auto word : word_list)
         std::cout << word << '\n';
@@ -39,4 +41,6 @@ int main() {
     std::cout << puz << '\n';
     //  Print the key
     std::cout << key << '\n';
+    // Print the solution
+    std::cout << sol << '\n';
 }
