@@ -1,4 +1,4 @@
-//Miro Manestar | CPTR-318 Wordsearch Assignment Part 2
+//Miro Manestar | CPTR-318 Wordsearch Assignment Completed
 //Monday, September 7, 2020 
 
 #include "uniformrandom.h"

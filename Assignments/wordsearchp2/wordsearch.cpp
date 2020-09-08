@@ -1,3 +1,6 @@
+//Miro Manestar | CPTR-318 Wordsearch Assignment Part 2
+//Tuesday, September 8, 2020 
+
 #include <iostream>
 #include <string>
 #include <vector>
