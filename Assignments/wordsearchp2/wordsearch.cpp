@@ -1,5 +1,9 @@
-//Miro Manestar | CPTR-318 Wordsearch Assignment Part 2
-//Tuesday, September 8, 2020 
+//  Name: Miro Manestar
+//  Assignment Number: 2
+//  Assignment: Wordsearch (Solving portion)
+//  File name: wordsearch.cpp
+//  Date last modified: September 18, 2020
+//  Honor statement: I have neither given nor received any unauthorized help on this assignment. 
 
 #include <iostream>
 #include <string>
