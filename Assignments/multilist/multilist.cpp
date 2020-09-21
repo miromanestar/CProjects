@@ -18,7 +18,9 @@ Multilist::Multilist(): first(new Node(0, "", 0)), last(new Node(0, "", 0)) {
     last->prev_name = first;
 }
 
-Multilist::~Multilist() { }
+Multilist::~Multilist() { 
+    delete this;
+}
 
 Multilist::Node::Node(int id, std::string name, int age): id(id), name(name), age(age) {
     this->next_id = nullptr;
@@ -30,8 +32,32 @@ Multilist::Node::Node(int id, std::string name, int age): id(id), name(name), ag
     this->prev_name = nullptr;
 }
 
+//Converts string to uppercase
+static std::string upper(std::string str) {
+    std::string temp;
+    for (std::string::size_type i=0; i<str.length(); ++i)
+        temp += std::toupper(str[i]);
+    return temp;
+}
+
+//Checks if a string contains only letters
+static bool isAlpha(std::string str) {
+    for (char letter : str) {
+        if(!std::isalpha(letter)) {
+            return false;
+        }
+    }
+    
+    return true;
+}
+
 bool Multilist::insert(int id, std::string name, int age) {
-    Node *node = new Node(id, name, age);
+    //Checks if name only has letters
+    if(!isAlpha(name)) {
+        return false;
+    }
+
+    Node *node = new Node(id, upper(name), age);
 
     //If list is essentially empty, then simply plop it in there and leave
     if(first->next_id == last) {
@@ -55,15 +81,49 @@ bool Multilist::insert(int id, std::string name, int age) {
     }
 
     //But if it's not empty, now we have to determine order... fun...
-    for (Node *p = first->next_id; p != last; p = p->next_id) {
-        int current = p->id;
+    //Determine where to insert by id
+    for (Node *p = first; p != last; p = p->next_id) {
         int next = p->next_id->id;
-        if(current <= id && next <= id) {
+        if(id == next) {
+            return false;
+        }
+
+        if(id < next || p->next_id == last) {
             node->prev_id = p;
             node->next_id = p->next_id;
 
             p->next_id->prev_id = node;
             p->next_id = node;
+
+            break;
+        }
+    }
+
+    //Determine where to insert by age
+    for (Node *p = first; p != last; p = p->next_age) {
+        int next = p->next_age->age;
+        if(age <= next || p->next_age == last) {
+            node->prev_age = p;
+            node->next_age = p->next_age;
+
+            p->next_age->prev_age = node;
+            p->next_age = node;
+
+            break;
+        }
+    }
+
+    //Determine where to insert by name
+    for (Node *p = first; p != last; p = p->next_name) {
+        std::string next = p->next_name->name;
+        if(name.compare(next) < 0 || p->next_name == last) {
+            node->prev_name = p;
+            node->next_name = p->next_name;
+
+            p->next_name->prev_name = node;
+            p->next_name = node;
+
+            break;
         }
     }
 
