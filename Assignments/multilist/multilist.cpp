@@ -33,30 +33,37 @@ Multilist::Node::Node(int id, std::string name, int age): id(id), name(name), ag
 bool Multilist::insert(int id, std::string name, int age) {
     Node *node = new Node(id, name, age);
 
-    //Go backwards from the tail to do constant time...
+    //If list is essentially empty, then simply plop it in there and leave
+    if(first->next_id == last) {
+        first->next_id = node;
+        first->next_name = node;
+        first->next_age = node;
 
-    for (Node *p = first; p != last; p = p->next_id) {
-        if (p->next_id == last) {
+        node->prev_id = first;
+        node->prev_name = first;
+        node->prev_age = first;
+
+        node->next_id = last;
+        node->next_name = last;
+        node->next_age = last;
+
+        last->prev_id = node;
+        last->prev_name = node;
+        last->prev_age = node;
+
+        return true;
+    }
+
+    //But if it's not empty, now we have to determine order... fun...
+    for (Node *p = first->next_id; p != last; p = p->next_id) {
+        int current = p->id;
+        int next = p->next_id->id;
+        if(current <= id && next <= id) {
             node->prev_id = p;
+            node->next_id = p->next_id;
+
+            p->next_id->prev_id = node;
             p->next_id = node;
-
-            node->next_id = last;
-        }
-    }
-    for (Node *p = first; p != last; p = p->next_name) {
-        if (p->next_name == last) {
-            node->prev_name = p;
-            p->next_name = node;
-
-            node->next_name = last;
-        }
-    }
-    for (Node *p = first; p != last; p = p->next_age) {
-        if (p->prev_age == last) {
-            node->prev_age = p;
-            p->next_age = node;
-
-            node->next_age = last;
         }
     }
 
@@ -68,37 +75,37 @@ bool Multilist::remove(int id) {
 }
 
 void Multilist::print_by_ID() {
-    for (Node *p = first; p != nullptr; p = p->next_id) {
+    for (Node *p = first->next_id; p != last; p = p->next_id) {
         std::cout << '(' << p->name << ',' << p->id << ',' << p->age << ")\n";
     }
 }
 
 void Multilist::print_by_ID_reverse() {
-    for (Node *p = last; p != nullptr; p = p->prev_id) {
+    for (Node *p = last->prev_id; p != first; p = p->prev_id) {
         std::cout << '(' << p->name << ',' << p->id << ',' << p->age << ")\n";
     }
 }
 
 void Multilist::print_by_name() {
-    for (Node *p = first; p != nullptr; p = p->next_name) {
+    for (Node *p = first->next_name; p != last; p = p->next_name) {
         std::cout << '(' << p->name << ',' << p->id << ',' << p->age << ")\n";
     }
 }
 
 void Multilist::print_by_name_reverse() {
-    for (Node *p = last; p != nullptr; p = p->prev_name) {
+    for (Node *p = last->prev_name; p != first; p = p->prev_name) {
         std::cout << '(' << p->name << ',' << p->id << ',' << p->age << ")\n";
     }
 }
 
 void Multilist::print_by_age() {
-    for (Node *p = first; p != nullptr; p = p->next_age) {
+    for (Node *p = first->next_age; p != last; p = p->next_age) {
         std::cout << '(' << p->name << ',' << p->id << ',' << p->age << ")\n";
     }
 }
 
 void Multilist::print_by_age_reverse() {
-    for (Node *p = last; p != nullptr; p = p->prev_age) {
+    for (Node *p = last->prev_age; p != first; p = p->prev_age) {
         std::cout << '(' << p->name << ',' << p->id << ',' << p->age << ")\n";
     }
 }
