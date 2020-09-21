@@ -8,19 +8,30 @@
 #include "multilist.h"
 
 Multilist::Multilist(void) {
-    int i = 0;
+    //Multilist *multilist = new Multilist;
+}
+
+Multilist::~Multilist(void) {
+
 }
 
 Multilist::Node::Node(int id, std::string name, int age): id(id), name(name), age(age) {
-    this->id = id;
-    this->name = name;
-    this->age = age;
+
 }
 
 bool Multilist::insert(int id, std::string name, int age) {
     Node *node = new Node(id, name, age);
     
-    first->next_id = node->prev_id;
+    if(first->next_id == nullptr) {
+        first->next_id = node;
+    }
+    if(first->next_age == nullptr) {
+        first->next_age = node;
+    }
+    if(first->next_name == nullptr) {
+        first->next_name = node;
+    }
+
 
 
     return true;
@@ -31,7 +42,11 @@ bool Multilist::remove(int id) {
 }
 
 void Multilist::print_by_ID() {
-
+    std::string print;
+    while(first->next_id != nullptr) {
+        int temp = first->next_id;
+        print += std::to_string(temp);
+    }
 }
 
 void Multilist::print_by_ID_reverse() {
