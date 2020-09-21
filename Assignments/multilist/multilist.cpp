@@ -8,7 +8,7 @@
 #include "multilist.h"
 #include <iostream>
 
-Multilist::Multilist() { }
+Multilist::Multilist(): first(new Node(0, "", 0)), last(new Node(0, "", 0)) { }
 
 Multilist::~Multilist() { }
 
@@ -24,6 +24,9 @@ Multilist::Node::Node(int id, std::string name, int age): id(id), name(name), ag
 
 bool Multilist::insert(int id, std::string name, int age) {
     Node *node = new Node(id, name, age);
+
+    //Go backwards from the tail to do constant time...
+
     
     for (Node *p = first; p != nullptr; p = p->next_id) {
         if (p->next_id == nullptr) {
