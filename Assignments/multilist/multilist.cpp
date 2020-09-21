@@ -35,25 +35,24 @@ bool Multilist::insert(int id, std::string name, int age) {
 
     //Go backwards from the tail to do constant time...
 
-    
-    for (Node *p = first; p != nullptr; p = p->next_id) {
-        if (p->next_id == nullptr) {
+    for (Node *p = first; p != last; p = p->next_id) {
+        if (p->next_id == last) {
             node->prev_id = p;
             p->next_id = node;
 
             node->next_id = last;
         }
     }
-    for (Node *p = first; p != nullptr; p = p->next_name) {
-        if (p->next_name == nullptr) {
+    for (Node *p = first; p != last; p = p->next_name) {
+        if (p->next_name == last) {
             node->prev_name = p;
             p->next_name = node;
 
             node->next_name = last;
         }
     }
-    for (Node *p = first; p != nullptr; p = p->next_age) {
-        if (p->prev_age == nullptr) {
+    for (Node *p = first; p != last; p = p->next_age) {
+        if (p->prev_age == last) {
             node->prev_age = p;
             p->next_age = node;
 
