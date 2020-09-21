@@ -8,7 +8,15 @@
 #include "multilist.h"
 #include <iostream>
 
-Multilist::Multilist(): first(new Node(0, "", 0)), last(new Node(0, "", 0)) { }
+Multilist::Multilist(): first(new Node(0, "", 0)), last(new Node(0, "", 0)) { 
+    first->next_age = last;
+    first->next_id = last;
+    first->next_name = last;
+
+    last->prev_age = first;
+    last->prev_id = first;
+    last->prev_name = first;
+}
 
 Multilist::~Multilist() { }
 
