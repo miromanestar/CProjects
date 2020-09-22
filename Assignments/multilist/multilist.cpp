@@ -32,14 +32,6 @@ Multilist::Node::Node(int id, std::string name, int age): id(id), name(name), ag
     this->prev_name = nullptr;
 }
 
-//Converts string to uppercase
-static std::string upper(std::string str) {
-    std::string temp;
-    for (std::string::size_type i=0; i<str.length(); ++i)
-        temp += std::toupper(str[i]);
-    return temp;
-}
-
 //Checks if a string contains only letters
 static bool isAlpha(std::string str) {
     for (char letter : str) {
@@ -51,13 +43,22 @@ static bool isAlpha(std::string str) {
     return true;
 }
 
+//Converts string to uppercase
+static std::string upper(std::string str) {
+    std::string temp;
+    for (std::string::size_type i=0; i<str.length(); ++i)
+        temp += std::toupper(str[i]);
+    return temp;
+}
+
 bool Multilist::insert(int id, std::string name, int age) {
     //Checks if name only has letters
     if(!isAlpha(name)) {
         return false;
     }
 
-    Node *node = new Node(id, upper(name), age);
+    name = upper(name);
+    Node *node = new Node(id, name, age);
 
     //If list is essentially empty, then simply plop it in there and leave
     if(first->next_id == last) {
@@ -115,8 +116,8 @@ bool Multilist::insert(int id, std::string name, int age) {
 
     //Determine where to insert by name
     for (Node *p = first; p != last; p = p->next_name) {
-        std::string next = p->next_name->name;
-        if(name.compare(next) < 0 || p->next_name == last) {
+        std::string next = upper(p->next_name->name);
+        if(name.compare(next) <= 0 || p->next_name == last) {
             node->prev_name = p;
             node->next_name = p->next_name;
 
@@ -132,9 +133,19 @@ bool Multilist::insert(int id, std::string name, int age) {
 
 bool Multilist::remove(int id) {
     //Binary search??? Naaaahhhhhh, iterative is fiiiiinnnneeee....
-    for (Node *p = first->next_id; p != last; p = p->next_id) {
+    for (Node *p = first; p != last; p = p->next_id) {
         if(id == p->id) {
-            
+            Node *prev = p->prev_id;
+            prev->next_id = p->next_id;
+            prev->next_name = p->next_name;
+            prev->next_age = p->next_age;
+
+            Node *next = p->next_id;
+            next->prev_id = p->prev_id;
+            next->prev_name = p->prev_name;
+            next->prev_age = p->prev_age;
+
+            delete p;
 
             return true;
         }
