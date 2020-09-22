@@ -2,7 +2,7 @@
 //  Assignment number: 3
 //  Assignment: Multilists
 //  File name: multilist.cpp
-//  Date last modified: September 19, 2020
+//  Date last modified: September 22, 2020
 //  Honor statement: I have neither given nor received any unauthorized help on this assignment. 
 
 #include "multilist.h"
@@ -134,7 +134,7 @@ bool Multilist::insert(int id, std::string name, int age) {
 bool Multilist::remove(int id) {
     for (Node *p = first; p != last; p = p->next_id) {
         if(id == p->id) {
-            
+
             //Relink by ID
             p->prev_id->next_id = p->next_id;
             p->next_id->prev_id = p->prev_id; 
