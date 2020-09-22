@@ -132,18 +132,20 @@ bool Multilist::insert(int id, std::string name, int age) {
 }
 
 bool Multilist::remove(int id) {
-    //Binary search??? Naaaahhhhhh, iterative is fiiiiinnnneeee....
     for (Node *p = first; p != last; p = p->next_id) {
         if(id == p->id) {
-            Node *prev = p->prev_id;
-            prev->next_id = p->next_id;
-            prev->next_name = p->next_name;
-            prev->next_age = p->next_age;
+            
+            //Relink by ID
+            p->prev_id->next_id = p->next_id;
+            p->next_id->prev_id = p->prev_id; 
 
-            Node *next = p->next_id;
-            next->prev_id = p->prev_id;
-            next->prev_name = p->prev_name;
-            next->prev_age = p->prev_age;
+            //Relink by name
+            p->prev_name->next_name = p->next_name;
+            p->next_name->prev_name = p->prev_name;
+
+            //Relink by age
+            p->prev_age->next_age = p->next_age;
+            p->next_age->prev_age = p->prev_age;
 
             delete p;
 
