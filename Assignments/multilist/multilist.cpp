@@ -131,7 +131,16 @@ bool Multilist::insert(int id, std::string name, int age) {
 }
 
 bool Multilist::remove(int id) {
-    return true;
+    //Binary search??? Naaaahhhhhh, iterative is fiiiiinnnneeee....
+    for (Node *p = first->next_id; p != last; p = p->next_id) {
+        if(id == p->id) {
+            
+
+            return true;
+        }
+    }
+
+    return false;
 }
 
 void Multilist::print_by_ID() {
