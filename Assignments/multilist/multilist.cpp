@@ -133,7 +133,7 @@ bool Multilist::insert(int id, std::string name, int age) {
 
 bool Multilist::remove(int id) {
     for (Node *p = first; p != last; p = p->next_id) {
-        if(id == p->id) {
+        if(id == p->id && (p != first && p != last)) {
 
             //Relink by ID
             p->prev_id->next_id = p->next_id;
