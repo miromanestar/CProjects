@@ -2,7 +2,7 @@
 //  Assignment number: 3
 //  Assignment: Multilists
 //  File name: multilist.cpp
-//  Date last modified: September 22, 2020
+//  Date last modified: September 23, 2020
 //  Honor statement: I have neither given nor received any unauthorized help on this assignment. 
 
 #include "multilist.h"
@@ -19,7 +19,9 @@ Multilist::Multilist(): first(new Node(0, "", 0)), last(new Node(0, "", 0)) {
 }
 
 Multilist::~Multilist() { 
-    delete this;
+    for(Node *p = first; p == last; p = p->next_id) {
+        delete p;
+    }
 }
 
 Multilist::Node::Node(int id, std::string name, int age): id(id), name(name), age(age) {
