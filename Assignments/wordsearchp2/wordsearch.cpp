@@ -20,30 +20,28 @@ static std::vector<std::vector<int>> directions{{0, -1},  //Up
                                                 {-1, 1},  //Down-Left
                                                 {1, -1}}; //Up-Right
                                                 
-static std::vector<int> findWord(int x, int y, const std::string& word, LetterMatrix puz) {
+static std::vector<int> findWord(int x, int y, const std::string& word, LetterMatrix puz, std::vector<int> direction) {
     //If first letter doesn't match, move on (Saves time)
     if(puz[y][x] != word[0]) {
         return {-1};
     }
 
-    int dx, dy;
-    for(std::vector<int> direction : directions) {
-        dx = direction[0];
-        dy = direction[1];
+    int dx = direction[0];
+    int dy = direction[1];
 
-        for(int i = 1; i < (int) word.size(); i++) {
-            try {
-                char temp = puz.at(y + (i * dy)).at(x + (i * dx));
-                if(temp != word[i]) { 
-                    break;
-                } else if(i == (int) word.size() - 1) {
-                    return {x, y, dx, dy};
-                }
-            } catch(const std::out_of_range& oor) {
+    for(int i = 1; i < (int) word.size(); i++) {
+        try {
+            char temp = puz.at(y + (i * dy)).at(x + (i * dx));
+            if(temp != word[i]) { 
                 break;
+            } else if(i == (int) word.size() - 1) {
+                return {x, y, dx, dy};
             }
+        } catch(const std::out_of_range& oor) {
+            break;
         }
     }
+
     return {-1};
 }
 
@@ -68,9 +66,12 @@ LetterMatrix solve(const LetterMatrix& puzzle, const std::vector<std::string>& w
     for(std::string word : wordlist) {
         for(int y = 0; y < (int) puzzle.size(); y++) {
             for(int x = 0; x < (int) puzzle[y].size(); x++) {
-                pos = findWord(x, y, word, puzzle);
-                if (pos[0] != -1) {
-                    solution = fillSol(pos[0], pos[1], pos[2], pos[3], word, solution);
+                for(std::vector<int> direction : directions) {
+                    pos = findWord(x, y, word, puzzle, direction);
+                    
+                    if (pos[0] != -1) {
+                        solution = fillSol(pos[0], pos[1], pos[2], pos[3], word, solution);
+                    }
                 }
             }
         }
