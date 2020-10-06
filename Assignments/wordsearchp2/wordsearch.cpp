@@ -61,7 +61,7 @@ static LetterMatrix fillSol(int x, int y, int dx, int dy, std::string word, Lett
 LetterMatrix solve(const LetterMatrix& puzzle, const std::vector<std::string>& wordlist) {
     // Build an initial solution filled with periods
     LetterMatrix solution(puzzle.size(), std::vector<char>(puzzle[0].size(), filler));
-     std::vector<int> pos;
+    std::vector<int> pos;
 
     for(std::string word : wordlist) {
         for(int y = 0; y < (int) puzzle.size(); y++) {
