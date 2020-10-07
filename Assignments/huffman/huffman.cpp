@@ -11,34 +11,46 @@
 
 using namespace std;
 
-vector<char> huffVector(25);
+void process_char(char character);
+void read_data();
+void make_tree();
 
-void processChar(char character) {
+vector<int> counts(26);
+
+int main() {
+    read_data();
+
+    cout << "\nCounts:\n" << "-------\n";
+    int total = 0;
+    for(int i = 0; i < counts.size(); i++) {
+        cout << (char) ('A' + i) << ": " << (int) (counts[i]) << '\n';
+        total += counts[i];
+    }
+    cout << "Total = " << total << '\n';
+
+    cout << "\n------Huffman Coding Tree-------\n";
+    make_tree();
+    cout << "\n--------------------------------\n";
+
+}
+
+void make_tree() {
+
+}
+
+void read_data() {
+    char character;
+    while (cin.get(character)) {
+        process_char(character);
+    }
+}
+
+void process_char(char character) {
     cout << character;
 
     if(!isalpha(character))
         return;
     
     character = toupper(character);
-    huffVector[character - 65] += 1;
-}
-
-bool read_data() {
-    char character;
-    while (cin.get(character)) {
-        processChar(character);
-    }
-    return true;
-}
-
-int main() {
-
-    read_data();
-
-    cout << "Counts:\n" << "-------\n";
-    for(int i = 0; i < huffVector.size(); i++) {
-        cout << 'A' + i << ": " << huffVector[i] << '\n';
-    }
-    cout << '\n';
-
+    counts[character - 65] += 1;
 }
