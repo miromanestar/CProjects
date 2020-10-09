@@ -27,6 +27,10 @@ struct Node {
         this->right = nullptr;
 
     }
+    Node(int freq, Node *left, Node *right): freq(freq), left(left), right(right) {
+        this->next = nullptr;
+        this->letter = '.';
+    }
 };
 
 vector<int> get_freq();
@@ -77,45 +81,51 @@ Node* make_tree(vector<vector<int>> sorted_freq) {
         p = temp;
     }
 
-    
+    /*
     //Print out queue for debugging
     cout << '\n';
     for (Node *i = head; i != nullptr; i = i->next) {
         cout << i->letter << ": " << i->freq << '\n';
     }
+    */
     
     //Build the binary tree
     while (head->next != nullptr) {
-        Node *temp = new Node('.', head->freq + head->next->freq);
-        temp->left = head;
-        temp->right = head->next;
+        //Create node... frequency, left, right
+        Node *temp = new Node(head->freq + head->next->freq, head, head->next);
+        
+        //TODO: How to know when there is only 1 object left???
 
         Node *prev;
         for (Node *i = head; i != nullptr; i = i->next) {
-            if (temp->freq < i->freq) {
+            
+            if (temp->freq <= i->freq) {
                 temp->next = i;
                 prev->next = temp;
                 break;
             }
+
+            if (i->next == nullptr && temp->freq > i->freq) {
+                i->next = temp;
+                break;
+            }
+
             prev = i;
         }
 
-        head = head->next->next;
+        if (head->next->next != nullptr)
+            head = head->next->next;
+        else
+            head = head->next;
     }
 
     return head;
 }
 
 void print_tree(Node* tree) {
-    cout << '\n';
-    while (tree->right != nullptr) {
-        cout << tree->left->letter << ": " << tree->left->freq << '\t';
-
-        if (tree->right->letter != ' ')
-            cout << tree->right->letter << ": " << tree->right->freq;
-        cout << '\n';
-        tree = tree->right;
-    }
+    print_tree(tree->right);
+    cout << tree->letter << ": " << tree->freq << '\n';
+    print_tree(tree->left);
 }
 
 
