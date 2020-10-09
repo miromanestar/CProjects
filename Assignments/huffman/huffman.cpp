@@ -16,18 +16,18 @@ using namespace std;
 //Node structure to contain the binary tree
 struct Node {
     char letter;
-    int freq;
+    float freq;
     Node *left, *right;
 
     Node *next; //I feel like using the node itself for a FIFO structure is a bad idea but here we are...
 
-    Node(char letter, int freq): letter(letter), freq(freq) { 
+    Node(char letter, float freq): letter(letter), freq(freq) { 
         this->next = nullptr;
         this->left = nullptr;
         this->right = nullptr;
 
     }
-    Node(int freq, Node *left, Node *right): freq(freq), left(left), right(right) {
+    Node(float freq, Node *left, Node *right): freq(freq), left(left), right(right) {
         this->next = nullptr;
         this->letter = '.';
     }
@@ -36,7 +36,7 @@ struct Node {
 vector<int> get_freq();
 vector<vector<int>> sort_freq(vector<int> v);
 Node* make_tree(vector<vector<int>> sorted_freq);
-void print_tree(Node* tree, int depth, char link, int total);
+void print_tree(Node* tree, int depth, char link);
 
 int main() {
     //Gets an unsorted frequency table of letters from stdin
@@ -63,7 +63,7 @@ int main() {
     Node* tree = make_tree(sorted_freqTable);
 
     cout << "\n------Huffman Coding Tree-------\n";
-    print_tree(tree, 0, '-', tree->freq);
+    print_tree(tree, 0, '-');
     cout << "\n--------------------------------\n";
 }
 
@@ -72,10 +72,8 @@ Node* make_tree(vector<vector<int>> sorted_freq) {
     //Build the queue, starting with lowest frequency items
     Node *head;
     Node *p;
-    int count;
     for (int i = 0; i < (int) sorted_freq.size() - 1; i++) {
-        Node *temp = new Node(sorted_freq[i][0], sorted_freq[i][1]);
-        count++;
+        Node *temp = new Node(sorted_freq[i][0], (float) sorted_freq[i][1]/sorted_freq[sorted_freq.size() - 1][1]);
 
         if (i == 0)
             head = temp;
@@ -85,13 +83,9 @@ Node* make_tree(vector<vector<int>> sorted_freq) {
     }
     
     //Build the binary tree
-    //It occurs to me I could've converted the frequencies to percentages and
-    //checked for when head->freq == 1... buuuuut I've already written this
-    //and it works.
-    while (count > 1) {
+    while (head->freq != 1) {
         //Create node... frequency, left, right
         Node *temp = new Node(head->freq + head->next->freq, head, head->next);
-        count++;
         
         Node *prev;
         for (Node *i = head; i != nullptr; i = i->next) {
@@ -110,7 +104,6 @@ Node* make_tree(vector<vector<int>> sorted_freq) {
             prev = i;
         }
 
-        count -= 2;
         if (head->next->next != nullptr)
             head = head->next->next;
         else
@@ -120,19 +113,19 @@ Node* make_tree(vector<vector<int>> sorted_freq) {
     return head;
 }
 
-void print_tree(Node* tree, int depth, char link, int total) {
+void print_tree(Node* tree, int depth, char link) {
     if (tree != nullptr) {
-        print_tree(tree->right, depth + 1, '/', total);
+        print_tree(tree->right, depth + 1, '/');
 
         for (int i = 0; i < depth; i++)
             cout << "    ";
 
         if (tree->letter == '.')
-            cout << link << '[' << (float) tree->freq/total << ']' << '\n';
+            cout << link << '[' << (float) tree->freq << ']' << '\n';
         else
-            cout << link << '[' << tree->letter << ": " << (float) tree->freq/total << ']' << '\n';
+            cout << link << '[' << tree->letter << ": " << (float) tree->freq << ']' << '\n';
 
-        print_tree(tree->left, depth + 1, '\\', total);
+        print_tree(tree->left, depth + 1, '\\');
     }
 }
 
