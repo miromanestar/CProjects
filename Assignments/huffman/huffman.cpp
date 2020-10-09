@@ -36,7 +36,7 @@ struct Node {
 vector<int> get_freq();
 vector<vector<int>> sort_freq(vector<int> v);
 Node* make_tree(vector<vector<int>> sorted_freq);
-void print_tree(Node* tree);
+void print_tree(Node* tree, int depth, char link, int total);
 
 int main() {
     //Gets an unsorted frequency table of letters from stdin
@@ -63,7 +63,7 @@ int main() {
     Node* tree = make_tree(sorted_freqTable);
 
     cout << "\n------Huffman Coding Tree-------\n";
-    print_tree(tree);
+    print_tree(tree, 0, '-', tree->freq);
     cout << "\n--------------------------------\n";
 }
 
@@ -72,30 +72,27 @@ Node* make_tree(vector<vector<int>> sorted_freq) {
     //Build the queue, starting with lowest frequency items
     Node *head;
     Node *p;
+    int count;
     for (int i = 0; i < (int) sorted_freq.size() - 1; i++) {
         Node *temp = new Node(sorted_freq[i][0], sorted_freq[i][1]);
+        count++;
+
         if (i == 0)
             head = temp;
         else
             p->next = temp;
         p = temp;
     }
-
-    /*
-    //Print out queue for debugging
-    cout << '\n';
-    for (Node *i = head; i != nullptr; i = i->next) {
-        cout << i->letter << ": " << i->freq << '\n';
-    }
-    */
     
     //Build the binary tree
-    while (head->next != nullptr) {
+    //It occurs to me I could've converted the frequencies to percentages and
+    //checked for when head->freq == 1... buuuuut I've already written this
+    //and it works.
+    while (count > 1) {
         //Create node... frequency, left, right
         Node *temp = new Node(head->freq + head->next->freq, head, head->next);
+        count++;
         
-        //TODO: How to know when there is only 1 object left???
-
         Node *prev;
         for (Node *i = head; i != nullptr; i = i->next) {
             
@@ -113,6 +110,7 @@ Node* make_tree(vector<vector<int>> sorted_freq) {
             prev = i;
         }
 
+        count -= 2;
         if (head->next->next != nullptr)
             head = head->next->next;
         else
@@ -122,12 +120,21 @@ Node* make_tree(vector<vector<int>> sorted_freq) {
     return head;
 }
 
-void print_tree(Node* tree) {
-    print_tree(tree->right);
-    cout << tree->letter << ": " << tree->freq << '\n';
-    print_tree(tree->left);
-}
+void print_tree(Node* tree, int depth, char link, int total) {
+    if (tree != nullptr) {
+        print_tree(tree->right, depth + 1, '/', total);
 
+        for (int i = 0; i < depth; i++)
+            cout << "    ";
+
+        if (tree->letter == '.')
+            cout << link << '[' << (float) tree->freq/total << ']' << '\n';
+        else
+            cout << link << '[' << tree->letter << ": " << (float) tree->freq/total << ']' << '\n';
+
+        print_tree(tree->left, depth + 1, '\\', total);
+    }
+}
 
 //Reads in data and reads the frequencies of alphabetic characters only
 vector<int> get_freq() {
