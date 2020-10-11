@@ -9,8 +9,6 @@
 #include <vector>
 #include <string>
 
-#include <fstream>
-
 using namespace std;
 
 //Node structure to contain the binary tree
