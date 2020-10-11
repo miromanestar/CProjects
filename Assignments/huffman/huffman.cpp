@@ -2,7 +2,7 @@
 //  Assignment number: 3
 //  Assignment: Huffman Coding Tree
 //  File name: huffman.cpp
-//  Date last modified: October 8, 2020
+//  Date last modified: October 11, 2020
 //  Honor statement: I have neither given nor received any unauthorized help on this assignment. 
 
 #include <iostream>
@@ -37,6 +37,8 @@ vector<int> get_freq();
 vector<vector<int>> sort_freq(vector<int> v);
 Node* make_tree(vector<vector<int>> sorted_freq);
 void print_tree(Node* tree, int depth, char link);
+vector<vector<string>> get_prefixes(Node* tree);
+void print_prefixes(vector<vector<string>> prefixes);
 
 int main() {
     //Gets an unsorted frequency table of letters from stdin
@@ -54,17 +56,14 @@ int main() {
     //sorted_freqTable, since it isn't alphabetical but sorted by frequency, stores the character in a 2d array with its frequency.
     vector<vector<int>> sorted_freqTable = sort_freq(freqTable);
 
-    /*
-    //Print out sorted table for debugging
-    for (int i = 0; i < (int) sorted_freqTable.size() - 1; i++)
-        cout << (char) sorted_freqTable[i][0] << ": " << sorted_freqTable[i][1] << '\n';
-    */
-
     Node* tree = make_tree(sorted_freqTable);
 
-    cout << "\n------Huffman Coding Tree-------\n";
+    cout << "\n------Huffman Coding Tree-------\n\n";
     print_tree(tree, 0, '-');
     cout << "\n--------------------------------\n";
+
+    vector<vector<string>> prefixes = get_prefixes(tree);
+    print_prefixes(prefixes);
 }
 
 Node* make_tree(vector<vector<int>> sorted_freq) {
@@ -121,20 +120,42 @@ void print_tree(Node* tree, int depth, char link) {
             cout << "    ";
 
         if (tree->letter == '.')
-            cout << link << '[' << (float) tree->freq << ']' << '\n';
+            cout << link << '[' << tree->freq << ']' << '\n';
         else
-            cout << link << '[' << tree->letter << ": " << (float) tree->freq << ']' << '\n';
+            cout << link << '[' << tree->letter << ": " << tree->freq << ']' << '\n';
 
         print_tree(tree->left, depth + 1, '\\');
     }
 }
 
+vector<vector<string>> get_prefixes(Node* tree, string prefix, vector<vector<string>> prefixes) {
+    if (tree->right != nullptr)
+        prefixes = get_prefixes(tree->right, prefix + "1", prefixes);
+    if (tree->left != nullptr)
+        prefixes = get_prefixes(tree->left, prefix + "0", prefixes);
+
+    if (tree->letter != '.')
+        prefixes.push_back({ string(1, tree->letter), prefix });
+
+    return prefixes;
+}
+
+vector<vector<string>> get_prefixes(Node* tree) {
+    vector<vector<string>> prefixes;
+
+    prefixes = get_prefixes(tree, "", prefixes);
+
+    return prefixes;
+}
+
+void print_prefixes(vector<vector<string>> prefixes) {
+    for (vector<string> item : prefixes)
+        cout << item[0] << ": " << item[1] << '\n';
+}
+
 //Reads in data and reads the frequencies of alphabetic characters only
 vector<int> get_freq() {
     vector<int> data(27);
-
-    //ifstream input;
-    //input.open("declaration.txt");
 
     char character;
     while (cin.get(character)) {

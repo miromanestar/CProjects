@@ -19,8 +19,8 @@ Multilist::Multilist(): first(new Node(0, "", 0)), last(new Node(0, "", 0)) {
 }
 
 Multilist::~Multilist() { 
-    for(Node *p = first; p != last; p = p->next_id) {
-        delete p;
+    for(Node *p = first->next_id; p != nullptr; p = p->next_id) {
+        delete p->prev_id;
     }
     delete last;
 }
