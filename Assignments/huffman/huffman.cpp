@@ -2,7 +2,7 @@
 //  Assignment number: 3
 //  Assignment: Huffman Coding Tree
 //  File name: huffman.cpp
-//  Date last modified: October 14, 2020
+//  Date last modified: October 20, 2020
 //  Honor statement: I have neither given nor received any unauthorized help on this assignment. 
 
 #include <iostream>
