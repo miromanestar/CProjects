@@ -13,6 +13,7 @@
 using namespace std;
 
 class HuffmanNode {
+protected:
     double freq;
 
 public:
@@ -21,6 +22,9 @@ public:
     
     virtual void print_prefixes(string prefix) const = 0;
     virtual void print_prefixes() const { print_prefixes(""); }
+
+    virtual void print_tree(int depth, char link) const = 0;
+    virtual void print_tree() const { print_tree(0, '-'); }
 };
 
 class Leaf: public HuffmanNode {
@@ -31,6 +35,12 @@ public:
 
     void print_prefixes(string bitString) const override {
         cout << character << " : " << bitString << endl;
+    }
+
+    void print_tree(int depth, char link) const override {
+        for (int i = 0; i < depth; i++)
+            cout << "    ";
+        cout << link << '[' << character << ": " << freq << ']' << endl;
     }
 };
 
@@ -49,11 +59,23 @@ public:
             right->print_prefixes(bitString + "1");
     }
 
+    void print_tree(int depth, char link) const override {
+        if (right != nullptr)
+            right->print_tree(depth + 1, '/');
+        
+        for (int i = 0; i < depth; i++)
+            cout << "    ";
+        cout << link << '[' << freq << ']' << endl;
+
+        if (left != nullptr)
+            left->print_tree(depth + 1, '\\');
+    }
+
 };
 
 struct CompareFreq {
     bool operator() (HuffmanNode *n1, HuffmanNode *n2) {
-        return n1->get_freq() < n2->get_freq();
+        return n1->get_freq() > n2->get_freq();
     }
 };
 
@@ -79,9 +101,8 @@ HuffmanNode* make_tree(vector<int> v) {
     //Build the queue
     priority_queue<HuffmanNode*, vector<HuffmanNode*>, CompareFreq> queue;
     //size - 1 for v because last index of v holds the total
-    for (int i = 0; i < v.size() - 1; i++) {
+    for (int i = 0; i < (int) v.size() - 1; i++)
         queue.push(new Leaf(i + 65, (float) v[i]/v[26]));
-    }
 
     //Make the tree
     while (queue.size() > 1) {
@@ -104,9 +125,12 @@ int main() {
 
     cout << "\nCounts:\n" << "-------\n";
     for (int i = 0; i < (int) freqTable.size() - 1; i++)
-        cout << (char) ('A' + i) << ": " << freqTable[i] << '\n';
-    cout << "Total: " << freqTable[26] << '\n';
+        cout << (char) ('A' + i) << ": " << freqTable[i] << endl;
+    cout << "Total: " << freqTable[26] << endl;
 
     HuffmanNode *tree = make_tree(freqTable);
+    cout << "\n------Huffman Coding Tree-------\n\n";
+    tree->print_tree();
+    cout << "\n--------------------------------\n";
     tree->print_prefixes();
 }
