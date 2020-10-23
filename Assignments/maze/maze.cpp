@@ -9,6 +9,20 @@
 #include <vector>
 #include <string>
 
+using namespace std;
+
+void gen_grid(int sizeX, int sizeY) {
+    for (int i = 0; i < sizeX; i++) {
+        for (int k = 0; k < sizeY; k++) {
+            if (k % 2 == 0)
+                cout << " | ";
+            else
+                cout << " -- ";
+        }
+        cout << endl;
+    }
+}
+
 int main() {
-    
+    gen_grid(10, 10);
 }
