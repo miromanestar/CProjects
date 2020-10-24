@@ -2,7 +2,7 @@
 //  Assignment number: 3
 //  Assignment: Huffman Coding Tree
 //  File name: huffman.cpp
-//  Date last modified: October 11, 2020
+//  Date last modified: October 20, 2020
 //  Honor statement: I have neither given nor received any unauthorized help on this assignment. 
 
 #include <iostream>
@@ -38,6 +38,17 @@ void print_tree(Node* tree, int depth, char link);
 vector<vector<string>> get_prefixes(Node* tree);
 void print_prefixes(vector<vector<string>> prefixes);
 
+//Just a test function to see if I could get a size function for kicks
+int size(Node* t) {
+    if (t) {
+        int s = 0;
+        s += size(t->right);
+        s += size(t->left);
+        s++;
+        return s;
+    }
+}
+
 int main() {
     //Gets an unsorted frequency table of letters from stdin
     //Who needs maps anyway????
@@ -55,7 +66,7 @@ int main() {
     vector<vector<int>> sorted_freqTable = sort_freq(freqTable);
 
     Node* tree = make_tree(sorted_freqTable);
-
+    cout << size(tree);
     cout << "\n------Huffman Coding Tree-------\n\n";
     print_tree(tree, 0, '-');
     cout << "\n--------------------------------\n";
