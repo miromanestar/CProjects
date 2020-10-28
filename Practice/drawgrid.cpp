@@ -1,7 +1,7 @@
 // Simple example showing how to draw lines with the SGL library
 
 #include <memory>
-#include <SGL/sgl.hpp>  // Use #include "sgl.hpp" on macOS
+#include <GL/sgl.hpp>  // Use #include "sgl.hpp" on macOS
 
 class GridWindow : public sgl::Window {
 public:
@@ -23,5 +23,4 @@ public:
 int main() {
     // Make a window and start the application
     sgl::run<GridWindow>(600.0, 400.0);
-    std::cout << "What will this do";
 }
