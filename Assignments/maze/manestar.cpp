@@ -48,6 +48,25 @@ public:
         }
 };
 
+class DisjointSet {
+public:
+    int find(int i) {
+
+    }
+
+    int combine(int a, int b) {
+
+    }
+
+    int split(int a, int b) {
+
+    }
+
+    int cardinality(int a, int b) {
+        
+    }
+};
+
 int main() {
     sgl::run<MazeWindow>(600.0, 400.0);
 }
