@@ -10,7 +10,7 @@
 #include <GL/sgl.hpp>
 
 class Maze : public sgl::Window {
-    int cells = 0;
+    int cells;
     int cellsX;
     int cellsY;
     double cellWidth;
@@ -30,6 +30,7 @@ public:
 
     void draw_cells() {
         //Build the initial maze
+        cells = 0;
         for (int y = 1; y <= cellsY; y++) {
             for (int x = 1; x <= cellsX; x++) {
                 sgl::draw_rectangle(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
@@ -52,7 +53,15 @@ public:
     }
 
     void make_maze() {
-        //Retool Maze to utilize a 2d array and draw a maze from that
+        DisjointSet::DisjointSet set(cells);
+        std::vector<std::vector<int>> maze(cellsY, std::vector<int>(cellsX, 0));
+        while (set.Cardinality(0) <= cells) {
+            int cell = rand() % cells;
+            int row = cell/cellsX;
+            int column = cell % cellsX;
+            int wall = rand() % 4;
+
+        }
     }
 };
 
@@ -77,9 +86,9 @@ public:
         int set1 = Find(a);
         int set2 = Find(b);
         if (Cardinality(set1) >= Cardinality(set2))
-            set[set1] = set2;
-        else
             set[set2] = set1;
+        else
+            set[set1] = set2;
     }
 
     //Takes a set and puts each element from it inside its own equivalence class

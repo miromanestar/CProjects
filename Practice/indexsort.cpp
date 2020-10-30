@@ -29,11 +29,12 @@ int main() {
     cout << "Print vector on finish? Y/N\n";
     char doPrint;
     cin >> doPrint;
-    cout << "Sorting....\n";
+    cout << "Generating array....\n";
 
     generate(v.begin(), v.end(), f);
 
     //Start timer for time measurement
+    cout << "Sorting....\n";
     auto start = high_resolution_clock::now();
 
     //Sort vector v
@@ -50,7 +51,8 @@ int main() {
         print_vec(sorted);
     }
 
-    cout << "\nProgram finished in " << duration.count() << " microseconds.\n";
+    cout << "\nArray sorted in " << duration.count() << " microseconds, " << duration.count()/1000 << " milliseconds, " 
+         << duration.count()/1'000'000 << " seconds.";
 }
 
 vector<int> index_sort(vector<int> v) {
