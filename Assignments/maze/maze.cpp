@@ -56,13 +56,21 @@ public:
 
 class MazeCell {
     double x, y;
-    int cellIndex;
+    int cellIndex, width, height;
+    double vertices[4][4];
 public:
-    MazeCell(double x, double y, int cell) : x(x), y(y), cellIndex(cell) { }
+    MazeCell(double x, double y, double width, double height, int cell) : x(x), y(y), width(width), height(height), cellIndex(cell) { 
+       vertices[0][0] = x; vertices[0][1] = y; vertices[0][2] = x; vertices[0][3] = y + height;
+       vertices[1][0] = x; vertices[1][1] = y + height; vertices[1][2] = x + width; vertices[1][3] = y + height;
+       vertices[2][0] = x + width; vertices[2][1] = y; vertices[2][2] = x + width; vertices[2][3] = y + height;
+       vertices[3][0] = x; vertices[3][1] = y; vertices[3][2] = x + width; vertices[3][3] = y;
+    }
+
     MazeCell() : x(0), y(0), cellIndex(0) { }
     double get_x() { return x; }
     double get_y() { return y; }
     int get_index() { return cellIndex; }
+    auto get_vertices() { return vertices; }
 };
 
 class Maze: public sgl::Window {
@@ -79,18 +87,37 @@ public:
 
     void paint() override {
         sgl::set_color(sgl::BLACK);
+        draw_maze();
         
     }
 
     void make_maze() {
         for (int y = 0; y < (int) maze.size(); y++) {
             for (int x = 0; x < (int) maze[y].size(); x++) {
-                maze[y][x] = MazeCell((x + 1) * cellWidth, (y + 1) * cellHeight, y * (maze.size() - 1) + x);
+                maze[y][x] = MazeCell((x + 1) * cellWidth, (y + 1) * cellHeight, cellWidth, cellHeight, y * maze[y].size() + x);
+
+                if (x == 0 && y == 0) {
+                    sgl::set_color(sgl::WHITE);
+                    sgl::draw_line((x + 1) * cellWidth, (y + 1) * cellHeight, (x + 1) * cellWidth, (y + 1) * cellHeight + cellHeight);
+                    sgl::set_color(sgl::BLACK);
+                } else if (x == maze[y].size() - 1 && y == maze.size() - 1) {
+                    sgl::set_color(sgl::WHITE);
+                    sgl::draw_line((x + 1) * cellWidth + cellWidth, (y + 1) * cellHeight, (x + 1) * cellWidth + cellWidth, (y + 1) * cellHeight + cellHeight);
+                    sgl::set_color(sgl::BLACK);
+                }
+            }
+        }
+    }
+
+    void draw_maze() {
+        for (auto row : maze) {
+            for (auto cell : row) {
+                sgl::draw_rectangle(cell.get_x(), cell.get_y(), cellWidth, cellHeight);
             }
         }
     }
 };
 
 int main() {
-    Maze maze(40, 25);
+   sgl::run<Maze>(40, 25);
 }
