@@ -25,7 +25,6 @@ public:
     void paint() override {
         sgl::set_color(sgl::BLACK);
         draw_cells();
-        make_maze();
     }
 
     void draw_cells() {
@@ -49,18 +48,6 @@ public:
 
                 cells++;
             }
-        }
-    }
-
-    void make_maze() {
-        DisjointSet::DisjointSet set(cells);
-        std::vector<std::vector<int>> maze(cellsY, std::vector<int>(cellsX, 0));
-        while (set.Cardinality(0) <= cells) {
-            int cell = rand() % cells;
-            int row = cell/cellsX;
-            int column = cell % cellsX;
-            int wall = rand() % 4;
-
         }
     }
 };
@@ -118,5 +105,5 @@ public:
 };
 
 int main() {
-    sgl::run<Maze>(600.0, 400.0, 25, 40);
+    sgl::run<Maze>(600.0, 400.0, 40, 25);
 }
