@@ -70,6 +70,7 @@ class Maze: public sgl::Window {
     std::vector<std::vector<Vertex>> innerVertices;
     double width, height;
     int rows, columns, count;
+    double penSize = 3;
 public:
     Maze(int r, int c) : innerVertices(r - 1, std::vector<Vertex>(c - 1)), rows(r), columns(c), count(r * c),
         sgl::Window("Maze Generator - Miro Manestar", 0, 600.0, 0, 400.0) { 
@@ -79,7 +80,7 @@ public:
     
     void paint() override {
         sgl::set_color(sgl::BLACK);
-        sgl::set_line_width(3);
+        sgl::set_line_width(penSize);
         make_maze();
     }
 
@@ -112,11 +113,14 @@ public:
             if (check_dir(v, dir, set)) {
                 switch (dir) {
                     case 0: sgl::draw_line(v.get_x(), v.get_y(), v.get_x() - width, v.get_y()); break; //Left
-                    case 1: sgl::draw_line(v.get_x(), v.get_y(), v.get_x(), v.get_y() + height); break; //Up
-                    case 2: sgl::draw_line(v.get_x(), v.get_y(), v.get_x() + width, v.get_y()); break; //Right
-                    case 3: sgl::draw_line(v.get_x(), v.get_y(), v.get_x(), v.get_y() - height); break; //Down
+                    case 1: sgl::draw_line(v.get_x(), v.get_y(), v.get_x(), v.get_y() + height ); break; //Up
+                    case 2: sgl::draw_line(v.get_x(), v.get_y(), v.get_x() + width , v.get_y()); break; //Right
+                    case 3: sgl::draw_line(v.get_x(), v.get_y() , v.get_x(), v.get_y() - height); break; //Down
                 }
             }
+            sgl::set_color(sgl::BLACK);
+            sgl::fill_rectangle(v.get_x() - penSize/5, v.get_y() - penSize/5, penSize/3, penSize/3);
+            sgl::set_color(sgl::WHITE);
         }
     }
 
@@ -144,6 +148,11 @@ public:
         } else {
             return false;
         }
+    }
+
+    void key_pressed(int key, double x, double y) override {
+        if (key == ' ' || key == 32)
+            repaint();
     }
 
     int get_index(int c, int r) { return (r - 1) * columns + (c - 1); }
