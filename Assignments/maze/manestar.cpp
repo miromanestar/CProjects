@@ -46,14 +46,13 @@ public:
         }
     }
 
-    //Returns the number of items in a set
+    //Returns the number of equivalence classes
     int Cardinality() {
         int count = 0;
-        for (int i = 0; i < (int) set.size(); i++) {
+        for (int i = 0; i < set.size(); i++) {
             if (set[i] == i)
                 count++;
         }
-
         return count;
     }
 };
@@ -80,7 +79,7 @@ public:
     
     void paint() override {
         sgl::set_color(sgl::BLACK);
-        sgl::set_line_width(1.5);
+        sgl::set_line_width(3);
         make_maze();
     }
 
@@ -96,7 +95,7 @@ public:
         for (int r = 1; r <= rows; r++) {
             for (int c = 1; c <= columns; c++) {
                 sgl::draw_rectangle(c * width, r * height, width, height);
-                sgl::draw_text(std::to_string(get_index(c - 1, r - 1)), c * width + width/2, r * height + height/2, 12);
+                //sgl::draw_text(std::to_string(get_index(c, r)), c * width + width/2, r * height + height/2, 12);
             }
         }
 
@@ -106,10 +105,9 @@ public:
         sgl::draw_line(width * columns + width, height * rows, width * columns + width, height * rows + height); //Exit, top-left
         
         DisjointSet set(count);
-        while (set.Cardinality() > 42) {
+        while (set.Cardinality() > 1) {
             Vertex v = innerVertices[rand() % innerVertices.size()][rand() % innerVertices[0].size()];
             int dir = rand() % 4;
-            //int cr = set.Cardinality();
 
             if (check_dir(v, dir, set)) {
                 switch (dir) {
@@ -139,7 +137,7 @@ public:
             r1 = v.get_y() - height; c1 = v.get_x();
         }
 
-        i0 = get_index(c0/width - 1, r0/height - 1); i1 = get_index(c1/width - 1, r1/height - 1);
+        i0 = get_index(std::round(c0/width), std::round(r0/height)); i1 = get_index(std::round(c1/width), std::round(r1/height));
         if (set.Find(i0) != set.Find(i1)) {
             set.Union(i0, i1);
             return true;
@@ -148,7 +146,7 @@ public:
         }
     }
 
-    int get_index(int c, int r) { return r * columns + c; }
+    int get_index(int c, int r) { return (r - 1) * columns + (c - 1); }
     int get_c(int i) { return i % columns; }
     int get_r(int i) { return i/columns; }
 };
