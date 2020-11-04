@@ -80,6 +80,7 @@ public:
     
     void paint() override {
         sgl::set_color(sgl::BLACK);
+        sgl::set_line_width(1.5);
         make_maze();
     }
 
@@ -95,6 +96,7 @@ public:
         for (int r = 1; r <= rows; r++) {
             for (int c = 1; c <= columns; c++) {
                 sgl::draw_rectangle(c * width, r * height, width, height);
+                sgl::draw_text(std::to_string(get_index(c - 1, r - 1)), c * width + width/2, r * height + height/2, 12);
             }
         }
 
@@ -138,7 +140,7 @@ public:
         }
 
         i0 = get_index(c0/width - 1, r0/height - 1); i1 = get_index(c1/width - 1, r1/height - 1);
-        if (i0 < count && i1 < count && set.Find(i0) != set.Find(i1)) {
+        if (set.Find(i0) != set.Find(i1)) {
             set.Union(i0, i1);
             return true;
         } else {
