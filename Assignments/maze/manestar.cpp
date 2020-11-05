@@ -2,7 +2,7 @@
 //  Assignment number: 4
 //  Assignment: Maze Generation
 //  File name: manestar.cpp
-//  Date last modified: November 4, 2020
+//  Date last modified: November 5, 2020
 //  Honor statement: I have neither given nor received any unauthorized help on this assignment.
 
 #include <memory>
@@ -118,6 +118,8 @@ public:
                     case 3: sgl::draw_line(v.get_x(), v.get_y() , v.get_x(), v.get_y() - height); break; //Down
                 }
             }
+            
+            //Try and get rid of the ugly gaps in the maze...
             sgl::set_color(sgl::BLACK);
             sgl::fill_rectangle(v.get_x() - penSize/5, v.get_y() - penSize/5, penSize/3, penSize/3);
             sgl::set_color(sgl::WHITE);
@@ -150,6 +152,7 @@ public:
         }
     }
 
+    //Regenerate maze when space key pressed
     void key_pressed(int key, double x, double y) override {
         if (key == ' ' || key == 32)
             repaint();
