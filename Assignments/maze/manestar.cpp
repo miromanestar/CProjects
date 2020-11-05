@@ -49,7 +49,7 @@ public:
     //Returns the number of equivalence classes
     int Cardinality() {
         int count = 0;
-        for (int i = 0; i < set.size(); i++) {
+        for (int i = 0; i < (int) set.size(); i++) {
             if (set[i] == i)
                 count++;
         }
@@ -68,12 +68,11 @@ public:
 
 class Maze: public sgl::Window {
     std::vector<std::vector<Vertex>> innerVertices;
-    double width, height;
     int rows, columns, count;
-    double penSize = 3;
+    double width, height, penSize = 3;
 public:
-    Maze(int r, int c) : innerVertices(r - 1, std::vector<Vertex>(c - 1)), rows(r), columns(c), count(r * c),
-        sgl::Window("Maze Generator - Miro Manestar", 0, 600.0, 0, 400.0) { 
+    Maze(int r, int c) : sgl::Window("Maze Generator - Miro Manestar", 0, 600.0, 0, 400.0), 
+    innerVertices(r - 1, std::vector<Vertex>(c - 1)), rows(r), columns(c), count(r * c) { 
             width = get_max_x()/(columns + 2);
             height = get_max_y()/(rows + 2);
         }
@@ -156,6 +155,7 @@ public:
     void key_pressed(int key, double x, double y) override {
         if (key == ' ' || key == 32)
             repaint();
+        sgl::Window::key_pressed(key, x, y);
     }
 
     int get_index(int c, int r) { return (r - 1) * columns + (c - 1); }
