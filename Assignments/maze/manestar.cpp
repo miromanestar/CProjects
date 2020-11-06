@@ -13,9 +13,7 @@ class DisjointSet {
     std::vector<int> set;
 public:
     DisjointSet(int numElements): set(numElements) { 
-        for (int i = 0; i < (int) set.size(); i++) {
-            set[i] = i;
-        }
+        this->Split();
     }
 
     //Returns the "parent" element of an equivalence class
@@ -32,18 +30,10 @@ public:
         set[set1] = set2;
     }
 
-    //Takes a set and puts each element from it inside its own equivalence class
-    void Split(int a) {
-        std::vector<int> temp;
-        for (int i = 0; i < (int) set.size(); i++) {
-            if (Find(set[i]) == a) {
-                temp.push_back(i);
-            }
-        }
-
-        for (int item : temp) {
-            set[item] = item;
-        }
+    //Takes the set and puts each item into its own equivalence class
+    void Split() {
+        for (int i = 0; i < (int) set.size(); i++)
+            set[i] = i;
     }
 
     //Returns the number of equivalence classes
@@ -69,7 +59,7 @@ public:
 class Maze: public sgl::Window {
     std::vector<std::vector<Vertex>> innerVertices;
     int rows, columns, count;
-    double width, height, penSize = 3;
+    double width, height;
 public:
     Maze(int r, int c) : sgl::Window("Maze Generator - Miro Manestar", 0, 600.0, 0, 400.0), 
     innerVertices(r - 1, std::vector<Vertex>(c - 1)), rows(r), columns(c), count(r * c) { 
@@ -79,7 +69,8 @@ public:
     
     void paint() override {
         sgl::set_color(sgl::BLACK);
-        sgl::set_line_width(penSize);
+        sgl::set_line_width(3);
+        std::cout << get_height() << ' ' << get_max_y() << '\n';
         make_maze();
     }
 
@@ -110,18 +101,14 @@ public:
             int dir = rand() % 4;
 
             if (check_dir(v, dir, set)) {
+                double offset = get_height() * 0.0004;
                 switch (dir) {
-                    case 0: sgl::draw_line(v.get_x(), v.get_y(), v.get_x() - width, v.get_y()); break; //Left
-                    case 1: sgl::draw_line(v.get_x(), v.get_y(), v.get_x(), v.get_y() + height ); break; //Up
-                    case 2: sgl::draw_line(v.get_x(), v.get_y(), v.get_x() + width , v.get_y()); break; //Right
-                    case 3: sgl::draw_line(v.get_x(), v.get_y() , v.get_x(), v.get_y() - height); break; //Down
+                    case 0: sgl::draw_line(v.get_x() - offset, v.get_y(), v.get_x() - width + offset, v.get_y()); break; //Left
+                    case 1: sgl::draw_line(v.get_x(), v.get_y() + offset, v.get_x(), v.get_y() + height - offset); break; //Up
+                    case 2: sgl::draw_line(v.get_x() + offset, v.get_y(), v.get_x() + width - offset, v.get_y()); break; //Right
+                    case 3: sgl::draw_line(v.get_x(), v.get_y() - offset, v.get_x(), v.get_y() - height + offset); break; //Down
                 }
             }
-            
-            //Try and get rid of the ugly gaps in the maze...
-            sgl::set_color(sgl::BLACK);
-            sgl::fill_rectangle(v.get_x() - penSize/5, v.get_y() - penSize/5, penSize/3, penSize/3);
-            sgl::set_color(sgl::WHITE);
         }
     }
 
@@ -142,7 +129,8 @@ public:
             r1 = v.get_y() - height; c1 = v.get_x();
         }
 
-        i0 = get_index(std::round(c0/width), std::round(r0/height)); i1 = get_index(std::round(c1/width), std::round(r1/height));
+        i0 = get_index(std::round(c0/width), std::round(r0/height)); 
+        i1 = get_index(std::round(c1/width), std::round(r1/height));
         if (set.Find(i0) != set.Find(i1)) {
             set.Union(i0, i1);
             return true;
