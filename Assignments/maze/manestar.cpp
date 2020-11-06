@@ -70,7 +70,6 @@ public:
     void paint() override {
         sgl::set_color(sgl::BLACK);
         sgl::set_line_width(3);
-        std::cout << get_height() << ' ' << get_max_y() << '\n';
         make_maze();
     }
 
