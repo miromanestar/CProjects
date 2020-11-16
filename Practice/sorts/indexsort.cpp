@@ -3,6 +3,7 @@
 #include <string>
 #include <chrono>
 #include <algorithm>
+#include <conio.h>
 
 using namespace std;
 using namespace std::chrono;
@@ -53,6 +54,9 @@ int main() {
 
     cout << "\nArray sorted in " << duration.count() << " microseconds, " << duration.count()/1000 << " milliseconds, " 
          << duration.count()/1'000'000 << " seconds.";
+
+    cout << "\n\nPress any key to exit\n";
+    getch();
 }
 
 vector<int> index_sort(vector<int> v) {
