@@ -11,6 +11,7 @@
 
 class DisjointSet {
     std::vector<int> set;
+    int cardinality;
 public:
     DisjointSet(int numElements): set(numElements) { 
         this->Split();
@@ -28,22 +29,19 @@ public:
         int set1 = Find(a);
         int set2 = Find(b);
         set[set1] = set2;
+        cardinality--;
     }
 
     //Takes the set and puts each item into its own equivalence class
     void Split() {
         for (int i = 0; i < (int) set.size(); i++)
             set[i] = i;
+        cardinality = (int) set.size();
     }
 
     //Returns the number of equivalence classes
     int Cardinality() {
-        int count = 0;
-        for (int i = 0; i < (int) set.size(); i++) {
-            if (set[i] == i)
-                count++;
-        }
-        return count;
+        return cardinality;
     }
 };
 
