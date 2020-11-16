@@ -40,7 +40,7 @@ int main() {
     //  Print the puzzle
     std::cout << puz << '\n';
     //  Print the key
-    std::cout << key << '\n';
+    std::cout << "\n--------Answer Key--------\n" << key << '\n';
     // Print the solution
-    std::cout << sol << '\n';
+    std::cout << "\n--------Generated Solution--------\n" << sol << '\n';
 }
