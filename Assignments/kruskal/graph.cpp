@@ -63,11 +63,25 @@ int Graph::weight() const {
     return sum;
 }
 
-//VERY MUCH NOT DONE, SHOULD USE BREADTH-FIRST TO FIND CONNECTION (FOR KRUSKAL)
+/*
+    Use an array of bools to mark a vertex as visited after processing
+    Use a queue to queue up processing all adjacent non-visited vertices
+    If the vertice denoted by *end* is found, end
+
+    TODO: Figure out how to maintain the weight of the path between begin and end
+*/
 int Graph::breadth_first_path_weight(const string& begin, const string& end) {
     return adjacency_matrix[label_to_vertex_map[begin]][label_to_vertex_map[end]];
 }
 
+/*
+    Given a graph, select the smallest edge and check if it forms a cycle (That is, any vertice has more than one path to any other).
+    Use a min-heap priority queue to sort all edges from smallest to largest
+    To check if it is a cycle, use a disjoint set to determine if two vertices between an edge are already connected
+    Repeat until the number of edges in the priority queue is # of vertices - 1
+
+    https://www.geeksforgeeks.org/kruskals-minimum-spanning-tree-algorithm-greedy-algo-2/
+*/
 Graph Graph::kruskal() {
     return Graph("test");
 }
