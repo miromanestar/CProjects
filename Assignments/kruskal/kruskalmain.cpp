@@ -6,6 +6,8 @@
 
 int main() {
     Graph g{"distance.table"};
+    
+    /*
     std::cout << g << '\n'; 
     std::cout << "Graph edge weights: " << g.weight() << '\n';
     std::cout << "\n====================================================\n\n";
@@ -19,5 +21,6 @@ int main() {
     else {
         std::cout << "London to Moscow path length: " << path_weight << '\n';
     }
+    */
 
 }
