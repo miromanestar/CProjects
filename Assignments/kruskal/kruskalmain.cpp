@@ -7,10 +7,11 @@
 int main() {
     Graph g{"distance.table"};
     
-    /*
     std::cout << g << '\n'; 
     std::cout << "Graph edge weights: " << g.weight() << '\n';
     std::cout << "\n====================================================\n\n";
+
+    /*
     Graph mst = g.kruskal();
     std::cout << mst << '\n'; 
     std::cout << "Graph edge weights: " << mst.weight() << '\n';
