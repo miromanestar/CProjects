@@ -65,8 +65,8 @@ int Graph::weight() const {
 }
 
 struct Vertex {
-    int v, prev, dist;
-    Vertex(int v) : v(v), prev(INT_MAX), dist(INT_MAX) { }
+    int dist, v;
+    Vertex(int v, int dist) : v(v), dist(dist) { }
 };
 
 struct CompareV {
@@ -76,27 +76,34 @@ struct CompareV {
 };
 
 int Graph::breadth_first_path_weight(const string& begin, const string& end) {
-    //Create queue and push all vertexes to it
+    //Create queue
     priority_queue<Vertex*, vector<Vertex*>, CompareV> queue;
-    for (int i = 0; i < size(); i++)
-        queue.push(new Vertex(i));
 
-    //Initialize first node
-    queue.top()->dist = 0;
+    //Create vector for distances
+    vector<int> dist(size(), INT_MAX);
+
+    //Push first vertex to queue and set distance as 0
+    queue.push(new Vertex(label_to_vertex_map[begin], 0));
+    dist[label_to_vertex_map[begin]] = 0;
 
     while (!queue.empty()) {
         Vertex *v = queue.top(); queue.pop();
-        if (v->dist == NO_CONNECTION) break;
 
+        //Go through all adjacent vertices of v
         for (int i = 0; i < size(); i++) {
-            if (adjacency_matrix[v->v][i] != NO_CONNECTION) {
-                int dist = v->dist + adjacency_matrix[v->v][i];
-                //if (dist < )
+            if (adjacency_matrix[v->v][i] != INT_MAX) {
+                //Get adjacent vertex data
+                Vertex *adjV = new Vertex(i, adjacency_matrix[v->v][i]);
+
+                if (dist[adjV->v] > dist[v->v] + adjV->dist) {
+                    dist[adjV->v] = dist[v->v] + adjV->dist;
+                    queue.push(adjV);
+                }
             }
         }
     }
 
-    return INT_MAX;
+    return dist[label_to_vertex_map[end]];
 }
 
 class DisjointSet {
