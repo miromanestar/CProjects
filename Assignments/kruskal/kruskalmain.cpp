@@ -2,7 +2,7 @@
 // Created 11/5/2019 8:25:28 PM
 
 #include <iostream>
-#include "Graph.h"
+#include "graph.h"
 
 int main() {
     Graph g{"distance.table"};
@@ -22,5 +22,4 @@ int main() {
     else {
         std::cout << "London to Moscow path length: " << path_weight << '\n';
     }
-
 }

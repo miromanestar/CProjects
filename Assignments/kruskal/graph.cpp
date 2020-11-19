@@ -2,18 +2,23 @@
 //  Assignment number: 5
 //  Assignment: Breadth-first Search and Kruskal's Algorithm
 //  File name: graph.cpp
-//  Date last modified: November 12, 2020
+//  Date last modified: November 19, 2020
 //  Honor statement: I have neither given nor received any unauthorized help on this assignment.
 
-//https://www.cs.southern.edu/halterman/Courses/Fall2020/318/Assignments/KruskalMST.html
+/*
+    For whatever reason, using NO_CONNECTION by itself in this file causes g++ to complain about
+    Graph::NO_CONNECTION being an undefined reference. Weirdly enough, sometimes NO_CONNECTION will compile,
+    but it seems to be kind of random....
+    I really don't know what to do about it so for now I'm just using INT_MAX
+*/
 
+#include "graph.h"
 #include <string>
 #include <iostream>
 #include <iomanip>
 #include <fstream>
 #include <sstream>
 #include <queue>
-#include "graph.h"
 
 using namespace std;
 
@@ -59,13 +64,13 @@ int Graph::weight() const {
     int sum = 0;
     for (int i = 0; i < (int) size(); i++)
         for (int k = i; k < (int) size(); k++)
-            if (adjacency_matrix[i][k] != NO_CONNECTION)
+            if (adjacency_matrix[i][k] != INT_MAX)
                 sum += adjacency_matrix[i][k];
     return sum;
 }
 
 struct Vertex {
-    int dist, v;
+    int v, dist;
     Vertex(int v, int dist) : v(v), dist(dist) { }
 };
 
