@@ -9,7 +9,7 @@ int main() {
     
     std::cout << g << '\n'; 
     std::cout << "Graph edge weights: " << g.weight() << '\n';
-    std::cout << "\n====================================================\n\n";
+    std::cout << "\n====================================================\n\n"; //hey miro i assume you are working so ill stop bothering you :)
     Graph mst = g.kruskal();
     std::cout << mst << '\n'; 
     std::cout << "Graph edge weights: " << mst.weight() << '\n';
