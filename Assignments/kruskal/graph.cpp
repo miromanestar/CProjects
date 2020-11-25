@@ -2,15 +2,8 @@
 //  Assignment number: 5
 //  Assignment: Breadth-first Search and Kruskal's Algorithm
 //  File name: graph.cpp
-//  Date last modified: November 19, 2020
+//  Date last modified: November 25, 2020
 //  Honor statement: I have neither given nor received any unauthorized help on this assignment.
-
-/*
-    For whatever reason, using NO_CONNECTION by itself in this file causes g++ to complain about
-    Graph::NO_CONNECTION being an undefined reference. Weirdly enough, sometimes NO_CONNECTION will compile,
-    but it seems to be kind of random....
-    I really don't know what to do about it so for now I'm just using NO_CONNECTION
-*/
 
 #include <string>
 #include <iostream>
@@ -202,14 +195,14 @@ std::ostream& operator<<(std::ostream& os, const Graph& g) {
 
     //Print rows
     for (int i = 0; i < (int) matrix.size(); i++) {
-        std::cout << std::right << std::setw(minFieldLength) << g.vertex_to_label_map[i] << " |";
+        os << std::right << std::setw(minFieldLength) << g.vertex_to_label_map[i] << " |";
         for (int val : matrix[i]) {
             if (val != g.NO_CONNECTION)
-                std::cout << std::setw(minFieldLength) << val;
+                os << std::setw(minFieldLength) << val;
             else
-                std::cout << std::setw(minFieldLength) << '-';
+                os << std::setw(minFieldLength) << '-';
         }
-        std::cout << std::endl;  
+        os << std::endl;  
     }
 
     return os;
