@@ -6,7 +6,6 @@
 //  Honor statement: I have neither given nor received any unauthorized help on this assignment.
 
 #include <string>
-#include <iostream>
 #include <iomanip>
 #include <fstream>
 #include <sstream>
