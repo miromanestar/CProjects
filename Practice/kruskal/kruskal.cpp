@@ -6,7 +6,7 @@ using namespace std;
 vector<vector<int>> adj_matrix = {
     {INT_MAX, 21, 42, INT_MAX, INT_MAX, INT_MAX, 22, 71, 50, 24, 10, INT_MAX},
     {21, INT_MAX, 26, 32, INT_MAX, 16, INT_MAX, INT_MAX, 23, INT_MAX, 12, INT_MAX},
-    {-42, 26, INT_MAX, INT_MAX, 29, INT_MAX, 5, 35, 41, 20, INT_MAX, 17},
+    {42, 26, INT_MAX, INT_MAX, 29, INT_MAX, 5, 35, 41, 20, INT_MAX, 17},
     {INT_MAX, 32, INT_MAX, INT_MAX, 33, 2, INT_MAX, INT_MAX, INT_MAX, 45, INT_MAX, INT_MAX},
     {INT_MAX, INT_MAX, 29, 33, INT_MAX, 27, INT_MAX, 36, 4, 19, INT_MAX, 80},
     {INT_MAX, 16, INT_MAX, 2, 27, INT_MAX, 13, 38, INT_MAX, 15, INT_MAX, INT_MAX},
