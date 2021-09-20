@@ -3,6 +3,7 @@
 
 using namespace std;
 
+/*
 vector<vector<int>> adj_matrix = {
     {INT_MAX, 21, 42, INT_MAX, INT_MAX, INT_MAX, 20, 7, 50, 14, 10, INT_MAX},
     {21, INT_MAX, 16, 32, INT_MAX, 16, INT_MAX, INT_MAX, 23, INT_MAX, 12, INT_MAX},
@@ -16,6 +17,16 @@ vector<vector<int>> adj_matrix = {
     {14, INT_MAX, 20, 45, 19, 15, INT_MAX, 6, 9, INT_MAX, INT_MAX, 31},
     {10, 12, INT_MAX, INT_MAX, INT_MAX, INT_MAX, INT_MAX, 45, 28, INT_MAX, INT_MAX, 7},
     {INT_MAX, INT_MAX, 17, INT_MAX, 80, INT_MAX, 18, INT_MAX, 14, 31, 7, INT_MAX}
+};
+*/
+
+vector<vector<int>> adj_matrix = {
+    { 0, 3, 4, 0, 0, 0 },
+    { 3, 0, 0, 6, 5, 0 },
+    { 4, 0, 0, 0, 1, 0 },
+    { 0, 6, 0, 0, 2, 7 },
+    { 0, 5, 1, 2, 0, 12 },
+    { 0, 0, 0, 7, 12, 0 }
 };
 
 
