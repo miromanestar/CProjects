@@ -41,7 +41,14 @@ int main() {
     my_list.clear();
 
     std::for_each(my_list.begin(), my_list.end(),
-        [](const string&s) { std::cout << s << ' '; });
+        [](const string& s) { std::cout << s << ' '; });
+    std::cout << '\n';
+
+    std::cout << "Let's test the copy constructor\n";
+    LinkedList my_list2 = my_list;
+
+    std::for_each(my_list2.begin(), my_list2.end(),
+        [](const string& s) { std::cout << s << ' '; });
     std::cout << '\n';
 
     std::cout << "Program finished\n";

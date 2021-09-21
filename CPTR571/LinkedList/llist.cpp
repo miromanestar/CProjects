@@ -14,26 +14,21 @@ LinkedList::Node::Node(const string& item) :
     data(item), next(nullptr), prev(nullptr) { }
 
 //LinkedList empty constructor
-LinkedList::LinkedList() : head(new Node(std::string())), tail(new Node(std::string())), len(0) {
+LinkedList::LinkedList() : 
+    head(new Node(std::string())), tail(new Node(std::string())), len(0) {
+
     head->next = tail;
     tail->prev = head;
 }
 
 //LinkedList copy constructor
-LinkedList::LinkedList(const LinkedList& other) {
+LinkedList::LinkedList(const LinkedList& other) :
+    head(new Node(std::string())), tail(new Node(std::string())), len(0) {
+    
+    head->next = tail;
+    tail->prev = head;
     for(Iterator i = other.begin(); i != other.end(); i++) {
-        Node* newNode = new Node(i.ptr->data); 
-
-        if (head->next == nullptr) {
-            head->next = newNode;
-            newNode->prev = head;
-        } else {
-            tail->prev->next = newNode;
-            newNode->prev = tail->prev;
-        }
-
-        newNode->next = tail;
-        tail->prev = newNode;
+        insert(i, i.ptr->data);
     }
 
 }
