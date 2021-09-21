@@ -7,8 +7,6 @@
 
 #include "llist.h"
 
-typedef LinkedList::Iterator Iterator;
-
 //Node constructor initialization
 LinkedList::Node::Node(const string& item) : 
     data(item), next(nullptr), prev(nullptr) { }
@@ -27,8 +25,12 @@ LinkedList::LinkedList(const LinkedList& other) :
     
     head->next = tail;
     tail->prev = head;
+
+    if (other.begin() == other.end())
+        return;
+
     for(Iterator i = other.begin(); i != other.end(); i++) {
-        insert(i, i.ptr->data);
+        insert(i, *i);
     }
 
 }
@@ -53,7 +55,7 @@ bool LinkedList::operator==(const LinkedList& other) const {
     Iterator i2 = other.begin();
 
     while (i1 != end() && i2 != other.end()) {
-        if (i1.ptr->data.compare(i2.ptr->data) != 0)
+        if ((*i1).compare(*i2) != 0)
             return false;
     }
 
@@ -85,7 +87,7 @@ void LinkedList::remove(Iterator& iter) {
     len--;
 }
 
-Iterator LinkedList::find(const string& seek) const {
+LinkedList::Iterator LinkedList::find(const string& seek) const {
     for (Iterator i = begin(); i != end(); i++) {
         if (seek.compare(i.ptr->data) == 0)
             return i;
@@ -110,47 +112,47 @@ void LinkedList::clear() {
     len = 0;
 }
 
-Iterator LinkedList::begin() const {
+LinkedList::Iterator LinkedList::begin() const {
     return Iterator(head->next);
 }
 
-Iterator LinkedList::end() const {
+LinkedList::Iterator LinkedList::end() const {
     return Iterator(tail);
 }
 
-Iterator::Iterator(Node* p) : ptr(p) { }
+LinkedList::Iterator::Iterator(Node* p) : ptr(p) { }
 
-string& Iterator::operator*() {
+string& LinkedList::Iterator::operator*() {
     return ptr->data;
 }
 
-Iterator& Iterator::operator++() {
+LinkedList::Iterator& LinkedList::Iterator::operator++() {
     ptr = ptr->next;
     return *this;
 }
 
 //Interesting that stack overflow says to always implement postincrement in terms of preincrement
-Iterator Iterator::operator++(int) {
+LinkedList::Iterator LinkedList::Iterator::operator++(int) {
     Iterator result = *this;
     ++(*this);
     return result;
 }
 
-Iterator& Iterator::operator--() {
+LinkedList::Iterator& LinkedList::Iterator::operator--() {
     ptr = ptr->prev;
     return *this;
 }
 
-Iterator Iterator::operator--(int) {
+LinkedList::Iterator LinkedList::Iterator::operator--(int) {
     Iterator result = *this;
     --(*this);
     return result;
 }
 
-bool Iterator::operator==(const Iterator& other) {
+bool LinkedList::Iterator::operator==(const Iterator& other) {
     return ptr == other.ptr;
 }
 
-bool Iterator::operator!=(const Iterator& other) {
+bool LinkedList::Iterator::operator!=(const Iterator& other) {
     return ptr != other.ptr;
 }

@@ -24,14 +24,18 @@ class LinkedList {
 
     int len;     // Number of elements in the list
 
-public:
-    // Clients have access to this nested public Iterator class.
+    // Clients have only indirect access to this nested Iterator class.
     class Iterator {
         Node *ptr;    // Keeps track of the position in the list
         friend LinkedList;  // Allows LinkedList methods to access ptr member
+        Iterator(Node *p);
     public:
         using value_type = string;
-        Iterator(Node *p);
+        using pointer = value_type*;
+        using reference = value_type&;
+        using iterator_category = std::forward_iterator_tag;
+        using difference_type = std::ptrdiff_t;
+
         string& operator*();      // Evaluates to the current object
         Iterator& operator++();   // Preincrement the position
         Iterator operator++(int); // Postincrement the position
@@ -45,6 +49,7 @@ public:
         bool operator!=(const Iterator& other);
     };
 
+public:
     // The constructor makes an initially empty list.
     // The list is empty when the head and tail 
     // sentinels directly point to each other.
