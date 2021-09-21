@@ -37,6 +37,12 @@ int main() {
     std::cout << "*** Add lots more test code to convince yourself that ";
     std::cout << "your code is correct. ***\n";
 
+    std::cout << "Let's see how it handles clearing\n";
+    my_list.clear();
+
+    std::for_each(my_list.begin(), my_list.end(),
+        [](const string&s) { std::cout << s << ' '; });
+    std::cout << '\n';
 
     std::cout << "Program finished\n";
 }
