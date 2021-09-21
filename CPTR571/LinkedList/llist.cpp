@@ -49,6 +49,14 @@ LinkedList& LinkedList::operator=(const LinkedList& other) {
     return *list;
 }
 
+bool LinkedList::operator==(const LinkedList& other) const {
+    return false;
+}
+
+bool LinkedList::operator!=(const LinkedList& other) const {
+    return false;
+}
+
 void LinkedList::insert(const Iterator& iter, const string& item) {
 
 }
@@ -64,4 +72,8 @@ int LinkedList::length() const {
 void LinkedList::clear() {
     this->~LinkedList();
     *this = *(new LinkedList());
+}
+
+LinkedList::Iterator::Iterator(Node* p) {
+    
 }
