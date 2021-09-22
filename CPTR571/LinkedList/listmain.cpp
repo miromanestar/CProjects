@@ -4,6 +4,12 @@
 #include <algorithm>   // For std::for_each
 #include "llist.h"   
 
+int print_list(LinkedList& list) {
+    std::for_each(list.begin(), list.end(), 
+        [](const string& s) { std::cout << s << ' '; });
+    std::cout << '\n';
+}
+
 int main() {
     std::cout << "Starting program\n";
     // Make an empty list
@@ -47,9 +53,15 @@ int main() {
     std::cout << "Let's test the copy constructor\n";
     LinkedList my_list2 = my_list;
 
-    std::for_each(my_list2.begin(), my_list2.end(),
-        [](const string& s) { std::cout << s << ' '; });
-    std::cout << '\n';
+    print_list(my_list2);
+
+    std::cout << "Add one item to list\n";
+    my_list2.insert(my_list2.end(), "BOB");
+    print_list(my_list2);
+
+    std::cout << "Now let's clear it\n";
+    my_list2.clear();
+    print_list(my_list2);
 
     std::cout << "Program finished\n";
 }

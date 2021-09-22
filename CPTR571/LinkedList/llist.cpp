@@ -100,10 +100,16 @@ int LinkedList::length() const {
     return len;
 }
 
+//Simply returns if list is already empty, otherwise makes an iterator
+//starting at the second valid node
 void LinkedList::clear() {
-    //*this = *(new LinkedList());
-    for (Iterator i = begin()++; i != end(); i++) {
-        delete i.ptr->prev;
+    if (begin() == end())
+        return;
+
+    for (Iterator i = begin(); i != end(); i++) {
+        Node* next = i.ptr->next;
+        delete i.ptr;
+        i.ptr = next;
     }
 
     head->next = tail;
