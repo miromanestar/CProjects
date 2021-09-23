@@ -4,7 +4,7 @@
 #include <algorithm>   // For std::for_each
 #include "llist.h"   
 
-int print_list(LinkedList& list) {
+void print_list(LinkedList& list) {
     std::for_each(list.begin(), list.end(), 
         [](const string& s) { std::cout << s << ' '; });
     std::cout << '\n';
@@ -62,6 +62,17 @@ int main() {
     std::cout << "Now let's clear it\n";
     my_list2.clear();
     print_list(my_list2);
+
+    std::cout << "Let's check equality\n";
+    my_list.insert(my_list.end(), "BOB");
+    my_list.insert(my_list.end(), "JILL");
+    my_list.insert(my_list.end(), "JOE");
+
+    my_list2.insert(my_list2.end(), "BOB");
+    my_list2.insert(my_list2.end(), "JILL");
+    my_list2.insert(my_list2.end(), "JOE");
+
+    std::cout << "my_list == my_list2: " << (my_list == my_list2) ? "true" : "false") << '\n';
 
     std::cout << "Program finished\n";
 }

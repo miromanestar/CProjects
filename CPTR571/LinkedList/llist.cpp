@@ -30,7 +30,7 @@ LinkedList::LinkedList(const LinkedList& other) :
         return;
 
     for(Iterator i = other.begin(); i != other.end(); i++) {
-        insert(i, *i);
+        insert(end(), *i);
     }
 
 }
@@ -57,6 +57,7 @@ bool LinkedList::operator==(const LinkedList& other) const {
     while (i1 != end() && i2 != other.end()) {
         if ((*i1).compare(*i2) != 0)
             return false;
+        i1++; i2++;
     }
 
     return true;
@@ -100,14 +101,13 @@ int LinkedList::length() const {
     return len;
 }
 
-//Simply returns if list is already empty, otherwise makes an iterator
-//starting at the second valid node
 void LinkedList::clear() {
     if (begin() == end())
         return;
 
-    for (Iterator i = begin(); i != end(); i++) {
-        Node* next = i.ptr->next;
+    Iterator i = begin();
+    while (i != end()) {
+        Node *next = i.ptr->next;
         delete i.ptr;
         i.ptr = next;
     }
