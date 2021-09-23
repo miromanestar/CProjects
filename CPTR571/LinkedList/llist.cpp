@@ -79,6 +79,11 @@ void LinkedList::insert(const Iterator& iter, const string& item) {
 }
 
 void LinkedList::remove(Iterator& iter) {
+    if (begin() == end())
+        return;
+    if (iter == end())
+        iter--;
+
     Node* node = iter.ptr;
 
     node->prev->next = node->next;
