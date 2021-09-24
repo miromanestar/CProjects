@@ -2,7 +2,7 @@
 //  Assignment number: 1
 //  Assignment: Linked List Implementation
 //  File name: llist.cpp
-//  Date last modified: September 20, 2021
+//  Date last modified: September 24, 2021
 //  Honor statement: I have neither given nor received any unauthorized help on this assignment.
 
 #include "llist.h"
@@ -26,7 +26,7 @@ LinkedList::LinkedList(const LinkedList& other) :
     head->next = tail;
     tail->prev = head;
 
-    if (other.begin() == other.end())
+    if (other.length() == 0)
         return;
 
     for(Iterator i = other.begin(); i != other.end(); i++) {
@@ -51,10 +51,13 @@ LinkedList& LinkedList::operator=(const LinkedList& other) {
 }
 
 bool LinkedList::operator==(const LinkedList& other) const {
+    if (length() != other.length())
+        return false;
+
     Iterator i1 = begin();
     Iterator i2 = other.begin();
 
-    while (i1 != end() && i2 != other.end()) {
+    while (i1 != end()) {
         if ((*i1).compare(*i2) != 0)
             return false;
         i1++; i2++;
@@ -79,10 +82,8 @@ void LinkedList::insert(const Iterator& iter, const string& item) {
 }
 
 void LinkedList::remove(Iterator& iter) {
-    if (begin() == end())
+    if (length() == 0)
         return;
-    if (iter == end())
-        iter--;
 
     Node* node = iter.ptr;
 
@@ -107,7 +108,7 @@ int LinkedList::length() const {
 }
 
 void LinkedList::clear() {
-    if (begin() == end())
+    if (length() == 0)
         return;
 
     Iterator i = begin();

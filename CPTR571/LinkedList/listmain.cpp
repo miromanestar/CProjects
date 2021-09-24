@@ -73,7 +73,10 @@ int main() {
     my_list2.insert(my_list2.end(), "JOE");
 
     std::cout << "my_list == my_list2: " << ((my_list == my_list2) ? "true" : "false") << '\n';
-    my_list2.remove(my_list2.end());
+    p = my_list2.find("JOE");
+    my_list2.remove(p );
+    std::cout << "my_list == my_list2: " << ((my_list == my_list2) ? "true" : "false") << '\n';
+    my_list2.insert(my_list2.end(), "JOE");
     std::cout << "my_list == my_list2: " << ((my_list == my_list2) ? "true" : "false") << '\n';
 
 
