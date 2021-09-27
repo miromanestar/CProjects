@@ -96,7 +96,7 @@ void LinkedList::remove(Iterator& iter) {
 
 LinkedList::Iterator LinkedList::find(const string& seek) const {
     for (Iterator i = begin(); i != end(); i++) {
-        if (seek.compare(i.ptr->data) == 0)
+        if (seek.compare(*i) == 0)
             return i;
     }
 
