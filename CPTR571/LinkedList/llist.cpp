@@ -113,9 +113,8 @@ void LinkedList::clear() {
 
     Iterator i = begin();
     while (i != end()) {
-        Node *next = i.ptr->next;
-        delete i.ptr;
-        i.ptr = next;
+        Iterator temp = i++;
+        delete temp.ptr;
     }
 
     head->next = tail;
