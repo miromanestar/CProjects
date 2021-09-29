@@ -13,7 +13,7 @@ LinkedList::Node::Node(const string& item) :
 
 //LinkedList empty constructor
 LinkedList::LinkedList() : 
-    head(new Node(std::string())), tail(new Node(std::string())), len(0) {
+    head(new Node("*HEAD*")), tail(new Node("*TAIL*")), len(0) {
 
     head->next = tail;
     tail->prev = head;
@@ -21,18 +21,9 @@ LinkedList::LinkedList() :
 
 //LinkedList copy constructor
 LinkedList::LinkedList(const LinkedList& other) :
-    head(new Node(std::string())), tail(new Node(std::string())), len(0) {
-    
-    head->next = tail;
-    tail->prev = head;
+    head(new Node("*HEAD*")), tail(new Node("*TAIL*")), len(0) {
 
-    if (other.length() == 0)
-        return;
-
-    for(Iterator i = other.begin(); i != other.end(); i++) {
-        insert(end(), *i);
-    }
-
+    *this = other;
 }
 
 //LinkedList destructor
@@ -45,9 +36,12 @@ LinkedList::~LinkedList() {
 //Creates a copy of the passed in list and returns a reference to it
 //Eliminates self, creates new LinkedList from passed in list and returns it
 LinkedList& LinkedList::operator=(const LinkedList& other) {
-    this->~LinkedList();
-    LinkedList* list = new LinkedList(other);
-    return *list;
+    if (this == &other)
+        return *this;
+
+    clear();
+    for (Iterator i = other.begin(); i != other.end(); i++)
+        insert(end(), *i);
 }
 
 bool LinkedList::operator==(const LinkedList& other) const {
@@ -71,6 +65,9 @@ bool LinkedList::operator!=(const LinkedList& other) const {
 }
 
 void LinkedList::insert(const Iterator& iter, const string& item) {
+    if (iter == --begin())
+        return;
+
     Node* node = new Node(item);
     node->prev = iter.ptr->prev;
     node->next = iter.ptr;
