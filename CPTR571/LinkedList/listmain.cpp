@@ -78,7 +78,7 @@ int main() {
     std::cout << "my_list == my_list2: " << ((my_list == my_list2) ? "true" : "false") << '\n';
     my_list2.insert(my_list2.end(), "JOE");
     std::cout << "my_list == my_list2: " << ((my_list == my_list2) ? "true" : "false") << '\n';
-
+    std::cout << "my_list != my_list2: " << ((my_list != my_list2) ? "true" : "false") << '\n';
 
     std::cout << "Program finished\n";
 }
