@@ -2,7 +2,7 @@
 //  Assignment number: 1
 //  Assignment: Linked List Implementation
 //  File name: llist.cpp
-//  Date last modified: September 28, 2021
+//  Date last modified: September 29, 2021
 //  Honor statement: I have neither given nor received any unauthorized help on this assignment.
 
 #include "llist.h"
@@ -23,6 +23,8 @@ LinkedList::LinkedList() :
 LinkedList::LinkedList(const LinkedList& other) :
     head(new Node("*HEAD*")), tail(new Node("*TAIL*")), len(0) {
     
+    head->next = tail;
+    tail->prev = head;
     *this = other;
 }
 
@@ -85,6 +87,7 @@ void LinkedList::remove(Iterator& iter) {
         return;
 
     Node* node = iter.ptr;
+    iter++;
 
     node->prev->next = node->next;
     node->next->prev = node->prev;
@@ -107,7 +110,9 @@ int LinkedList::length() const {
 }
 
 void LinkedList::clear() {
-    
+    if (length() == 0 || begin() == end())
+        return;
+
     Iterator i = begin();
     while (i != end()) {
         Iterator temp = i++;
@@ -116,7 +121,6 @@ void LinkedList::clear() {
 
     head->next = tail;
     tail->prev = head;
-
     len = 0;
 }
 
