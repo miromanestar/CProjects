@@ -22,7 +22,7 @@ LinkedList::LinkedList() :
 //LinkedList copy constructor
 LinkedList::LinkedList(const LinkedList& other) :
     head(new Node("*HEAD*")), tail(new Node("*TAIL*")), len(0) {
-
+    
     *this = other;
 }
 
@@ -42,6 +42,8 @@ LinkedList& LinkedList::operator=(const LinkedList& other) {
     clear();
     for (Iterator i = other.begin(); i != other.end(); i++)
         insert(end(), *i);
+    
+    return *this;
 }
 
 bool LinkedList::operator==(const LinkedList& other) const {
@@ -105,9 +107,7 @@ int LinkedList::length() const {
 }
 
 void LinkedList::clear() {
-    if (length() == 0)
-        return;
-
+    
     Iterator i = begin();
     while (i != end()) {
         Iterator temp = i++;
