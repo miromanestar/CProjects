@@ -82,7 +82,7 @@ void LinkedList::insert(const Iterator& iter, const string& item) {
 }
 
 void LinkedList::remove(Iterator& iter) {
-    if (length() == 0)
+    if (length() == 0 || iter == end() || iter == --begin())
         return;
 
     Node* node = iter.ptr;
