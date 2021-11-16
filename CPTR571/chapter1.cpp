@@ -1,6 +1,6 @@
 class Gadget {
 public:
-    Gadget() = delete;
+    Gadget();
 };
 
 class Widget {
