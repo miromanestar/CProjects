@@ -1,3 +1,10 @@
+//  Name: Miro Manestar
+//  Assignment number: 1
+//  Assignment: C++ Vector Algorithms
+//  File name: vectorutils.cpp
+//  Date last modified: August 25, 2022
+//  Honor statement: I have neither given nor received any unauthorized help on this assignment. 
+
 #include "vectorutils.h"
 
 using namespace std;
