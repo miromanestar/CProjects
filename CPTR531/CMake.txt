@@ -1,8 +1,14 @@
 This is an explanation of how to use CMake & Make on Windows
 
 In project directory, run these commands:
-- mkdir ./build
-- cd ./build
-- cmake ../ -G "Unix Makefiles"
+- mkdir debug
+- cd debug
+- cmake -G "Unix Makefiles" ..
 - make
 This should generate a .exe file on windows as opposed to creating an SLN for Visual Studio
+
+FOR RELEASE build
+mkdir release
+cd release
+cmake -DCMAKE_BUILD_TYPE=Release -G "Unix Makefiles" ..
+make

@@ -98,11 +98,7 @@ std::vector<int> make_vector(int size, int max_value) {
     return result;
 }
 
-
-
-int main() {
-    srand(42);
-
+void provided_tests() {
     std::vector<int> original{ 56, 100, 22, 19, 88, 22, 17, 100, 45 },
                      insertion_working,
                      merge_working;
@@ -150,5 +146,42 @@ int main() {
     std::cout << std::fixed << std::showpoint << std::setprecision(4);
     std::cout << "Insertion time: " << std::setw(10) << insertion_time << " seconds\n";
     std::cout << "Merge time    : " << std::setw(10) << merge_time << " seconds\n";
-    
+}
+
+
+void test_sorts(int size) {
+    auto v = make_vector(size, 1'000'000'000);
+
+    std::cout << "\n\nTesting sorts on vector of size " << size << "\n";
+
+    Stopwatch timer;
+
+    auto insertion = v;
+    timer.start();
+    insertion_sort(insertion);
+    timer.stop();
+    std::cout << std::fixed << std::showpoint << std::setprecision(4);
+    std::cout << "Insertion sort took " << timer.elapsed() << " seconds.\n\n";
+
+    auto merge = v;
+    timer.start();
+    merge_sort(merge);
+    timer.stop();
+    std::cout << std::fixed << std::showpoint << std::setprecision(4);
+    std::cout << "Merge sort took " << timer.elapsed() << " seconds.\n\n";
+}
+
+
+int main() {
+    srand(42);
+
+    std::cout << "\n\n======User tests======\n";
+
+    test_sorts(1'000'000);
+
+    test_sorts(10'000'000);
+
+    test_sorts(100'000'000);
+
+    std::cout << "Tests complete.";
 }
