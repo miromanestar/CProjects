@@ -152,7 +152,7 @@ void provided_tests() {
 void test_sorts(int size) {
     auto v = make_vector(size, 1'000'000'000);
 
-    std::cout << "\n\nTesting sorts on vector of size " << size << "\n";
+    std::cout << "Testing sorts on vector of size " << size << "\n";
 
     Stopwatch timer;
 
@@ -161,7 +161,9 @@ void test_sorts(int size) {
     insertion_sort(insertion);
     timer.stop();
     std::cout << std::fixed << std::showpoint << std::setprecision(4);
-    std::cout << "Insertion sort took " << timer.elapsed() << " seconds.\n\n";
+    std::cout << "Insertion sort took " << timer.elapsed() << " seconds.\n";
+
+    timer.reset();
 
     auto merge = v;
     timer.start();
@@ -175,7 +177,7 @@ void test_sorts(int size) {
 int main() {
     srand(42);
 
-    std::cout << "\n\n======User tests======\n";
+    std::cout << "======User tests======\n";
 
     test_sorts(1'000'000);
 
