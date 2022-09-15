@@ -160,8 +160,8 @@ void test_sorts(int size) {
     timer.start();
     insertion_sort(insertion);
     timer.stop();
-    std::cout << std::fixed << std::showpoint << std::setprecision(4);
-    std::cout << "Insertion sort took " << timer.elapsed() << " seconds.\n";
+    //std::cout << std::fixed << std::showpoint << std::setprecision(4);
+    std::cout << "Insertion sort took " << timer.elapsed() << " ms.\n";
 
     timer.reset();
 
@@ -169,8 +169,8 @@ void test_sorts(int size) {
     timer.start();
     merge_sort(merge);
     timer.stop();
-    std::cout << std::fixed << std::showpoint << std::setprecision(4);
-    std::cout << "Merge sort took " << timer.elapsed() << " seconds.\n\n";
+    //std::cout << std::fixed << std::showpoint << std::setprecision(4);
+    std::cout << "Merge sort took " << timer.elapsed() << " ms.\n\n";
 }
 
 
@@ -179,11 +179,13 @@ int main() {
 
     std::cout << "======User tests======\n";
 
+    test_sorts(10);
+    test_sorts(100);
+    test_sorts(1'000);
+    test_sorts(10'000);
+    test_sorts(100'000);
     test_sorts(1'000'000);
-
-    test_sorts(10'000'000);
-
-    test_sorts(100'000'000);
+    test_sorts(2'000'000);
 
     std::cout << "Tests complete.";
 }
