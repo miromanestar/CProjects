@@ -14,8 +14,8 @@ Matrix singleMatrix(Matrix &a, Matrix &b);
 void printMatrix(const Matrix &a);
 
 int main() {
-    int r = 1000;
-    int c = 1000;
+    int r = 200;
+    int c = 200;
     auto a = genMatrix(r, c);
     auto b = genMatrix(r, c);
 
@@ -42,9 +42,9 @@ int main() {
     timer.stop();
     double multi_time = timer.elapsed();
 
-    cout << "\n\n-----------------" << endl;
-    cout << "Single thread time: " << single_time << " ms." << endl;
-    cout << "Multi thread time: " << multi_time << " ms." << endl;
+    cout << "-----------------" << endl;
+    cout << "Single thread time: " << single_time << "s." << endl;
+    cout << "Multi thread time: " << multi_time << "s." << endl;
 }
 
 Matrix multiMatrix(Matrix &a, Matrix &b) {
@@ -63,6 +63,7 @@ Matrix multiMatrix(Matrix &a, Matrix &b) {
         }
     }
 
+    cout << "Awaiting threads to finish" << endl;
     for (auto &t : threads) {
         t.join();
     }
