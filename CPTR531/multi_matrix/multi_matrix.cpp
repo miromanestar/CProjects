@@ -4,18 +4,34 @@
 #include <iostream>
 #include "stopwatch.h"
 
+
 using namespace std;
 using Matrix = vector<vector<int>>;
 
 int main();
 Matrix genMatrix (int r, int c);
-Matrix multiMatrix(Matrix &a, Matrix &b);
+Matrix multiMatrix(Matrix &a, Matrix &b, int numThreads);
+void multiply(Matrix &a, Matrix &b, Matrix &result, int start, int end);
 Matrix singleMatrix(Matrix &a, Matrix &b);
 void printMatrix(const Matrix &a);
 
 int main() {
-    int r = 200;
-    int c = 200;
+    int r = 20;
+    int c = 20;
+    int numThreads = 4;
+
+    string in;
+    cout << "Enter max number of threads (Default: 4): ";
+    getline(cin, in);
+    if (!in.empty())
+        numThreads = stoi(in);
+    cout << "Enter number of rows and columns (Default: 20): ";
+    getline(cin, in);
+    if (!in.empty()) {
+        r = stoi(in);
+        c = stoi(in);
+    }
+
     auto a = genMatrix(r, c);
     auto b = genMatrix(r, c);
 
@@ -27,7 +43,7 @@ int main() {
     // cout << "-----------------" << endl;
     cout << "Beginning single thread multiplication" << endl;
     timer.start();
-    // printMatrix(singleMatrix(a, b));
+    //printMatrix(singleMatrix(a, b));
     singleMatrix(a, b);
     timer.stop();
     double single_time = timer.elapsed();
@@ -37,8 +53,8 @@ int main() {
     //cout << "-----------------" << endl;
     cout << "Beginning multi thread multiplication" << endl;
     timer.start();
-    // printMatrix(multiMatrix(a, b));
-    multiMatrix(a, b);
+    //printMatrix(multiMatrix(a, b));
+    multiMatrix(a, b, numThreads);
     timer.stop();
     double multi_time = timer.elapsed();
 
@@ -47,20 +63,37 @@ int main() {
     cout << "Multi thread time: " << multi_time << "s." << endl;
 }
 
-Matrix multiMatrix(Matrix &a, Matrix &b) {
+Matrix multiMatrix(Matrix &a, Matrix &b, int numThreads) {
     int r = a.size();
     int c = b[0].size();
     Matrix result(r, vector<int>(c, 0));
 
     vector<thread> threads;
-    for (int i = 0; i < r; i++) {
-        for (int j = 0; j < c; j++) {
-            threads.push_back(thread([&a, &b, &result, i, j] {
-                for (int k = 0; k < (int) a[0].size(); k++) {
-                    result[i][j] += a[i][k] * b[k][j];
-                }
-            }));
-        }
+
+    // This creates a thread for each row
+    // for (int i = 0; i < r; i++) {
+    //     threads.push_back(thread([&a, &b, &result, i] {
+    //         for (int j = 0; j < (int) b[0].size(); j++) {
+    //             for (int k = 0; k < (int) a[0].size(); k++) {
+    //                 result[i][j] += a[i][k] * b[k][j];
+    //             }
+    //         }
+    //     }));
+    //     cout << "Thread " << i << " created." << endl;
+    // }
+
+    // This creates threads according to the max thread constant
+    int remainder = r % numThreads;
+    int count = r / numThreads;
+    for (int t = 0; t < numThreads; t++) {
+        threads.push_back(thread([&a, &b, &result, t, count, remainder, numThreads] {
+            if (t == numThreads - 1) {
+                multiply(a, b, result, t * count, (t + 1) * count + remainder);
+            } else {
+                multiply(a, b, result, t * count, (t + 1) * count);
+            }
+        }));
+        cout << "Thread " << t << " created." << endl;
     }
 
     cout << "Awaiting threads to finish" << endl;
@@ -89,7 +122,17 @@ Matrix singleMatrix(Matrix &a, Matrix &b) {
     return matrix;
 }
 
-Matrix genMatrix (int r, int c) {
+void multiply(Matrix &a, Matrix &b, Matrix &result, int start, int end) {
+    for (int i = start; i < end; i++) {
+        for (int j = 0; j < (int) b[0].size(); j++) {
+            for (int k = 0; k < (int) a[0].size(); k++) {
+                result[i][j] += a[i][k] * b[k][j];
+            }
+        }
+    }
+}
+
+Matrix genMatrix(int r, int c) {
     Matrix matrix;
     for (int i = 0; i < r; i++) {
         vector<int> row;
