@@ -60,7 +60,7 @@ int main() {
 
     cout << "-----------------" << endl;
     cout << "Single thread time: " << single_time << "s." << endl;
-    cout << "Multi thread time: " << multi_time << "s." << endl;
+    cout << "Multi thread time (" << numThreads << "): " << multi_time << "s." << endl;
 }
 
 Matrix multiMatrix(Matrix &a, Matrix &b, int numThreads) {
@@ -93,7 +93,7 @@ Matrix multiMatrix(Matrix &a, Matrix &b, int numThreads) {
                 multiply(a, b, result, t * count, (t + 1) * count);
             }
         }));
-        cout << "Thread " << t << " created." << endl;
+        //cout << "Thread " << t << " created." << endl;
     }
 
     cout << "Awaiting threads to finish" << endl;
