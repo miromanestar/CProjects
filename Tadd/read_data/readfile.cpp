@@ -1,7 +1,8 @@
-#include "readfile.h"
-
-#include <fstream>
 #include <iostream>
+#include <vector>
+#include <string>
+#include <fstream>
+#include "readfile.h"
 
 std::vector<std::string> read_file(const std::string& filename) {
     std::vector<std::string> words;
@@ -24,7 +25,7 @@ int main(int argc, char *argv[]) {
     std::string filename(argv[1]);
     auto words  = read_file(filename);
 
-    for (int i = 0; i < (int) words.size(); i++) {
-        std::cout << words[i] << "\n";
+    for (auto word : words) {
+        std::cout << word << '\n';
     }
 }
